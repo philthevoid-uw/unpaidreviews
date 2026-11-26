@@ -86,7 +86,7 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 {body}
 </main>
 <footer><div class="wrap"><div class="cols">
-  <div><b>{e(SITE["name"])}</b><br>Independent. Paid for by the reviewer: no conflicts of interest, no affiliate links, no sponsorships, no gifts, and all revenue sources disclosed.</div>
+  <div><b>{e(SITE["name"])}</b><br>Independent. No one pays this site or its owners based on purchases of what is reviewed, and no revenue incentive decides what is reviewed or how it is scored.</div>
   <div><h4>Read</h4><ul>
     <li><a href="{root}how-we-review.html">How I review</a></li>
     <li><a href="{root}how-we-make-money.html">How the site is funded</a></li>
@@ -155,7 +155,7 @@ def home():
   </form>
 </section>
 <div class="proof">
-  <div><b>0</b><span>affiliate links, ever</span></div>
+  <div><b>0</b><span>pay per purchase: no affiliate links, ever</span></div>
   <div><b>0</b><span>sponsored reviews or gifts</span></div>
   <div><b>100%</b><span>disclose how the item was acquired</span></div>
   <div><b>All</b><span>revenue sources disclosed</span></div>
@@ -172,7 +172,7 @@ def home():
 <h2>How I protect independence</h2>
 <div class="pillars">
   <div class="pillar"><h3>I pay for everything</h3><p>Products are bought at retail. Meals and trips are paid in full, with no reviewer discounts and no tourism-board hosting.</p></div>
-  <div class="pillar"><h3>Nothing is for sale</h3><p>No affiliate links, no sponsored content and no payment that could influence what I say or how I score. Any association that could create a revenue stream is minimized, and every revenue source is disclosed.</p></div>
+  <div class="pillar"><h3>Nothing is for sale</h3><p>Neither this site nor its owners are paid when you buy something I review. No revenue incentive decides what gets reviewed, what is skipped, or whether a review is positive or negative. Reader reviews follow the same policy.</p></div>
   <div class="pillar"><h3>Mistakes are public</h3><p>Errors are fixed in the open and logged on the <a href="corrections.html">corrections page</a>. Scores are never changed because someone complained.</p></div>
 </div>
 <div class="band">
@@ -263,7 +263,9 @@ def how_review():
   <h2>Independence rules</h2>
   <ul>
     <li><b>I pay my own way.</b> Products are bought at normal retail price. Meals, hotels and tours are paid in full.</li>
-    <li><b>No affiliate links.</b> I earn nothing when you click or buy.</li>
+    <li><b>No payment based on purchases.</b> There are no affiliate links, commissions or referral fees. Neither the site nor its owners earn anything when you click or buy something reviewed here.</li>
+    <li><b>No revenue incentive over coverage.</b> No revenue incentive influences what is reviewed or not reviewed, or whether a review is positive or negative.</li>
+    <li><b>Community reviews follow the same policy.</b> Any review sourced from the community must adhere to these rules, and the community is built on these guiding principles.</li>
     <li><b>No sponsored content, gifts, comps or press trips.</b> If something is given to me without being asked (a free dessert, an upgrade), I say so at the top of the review.</li>
     <li><b>Disclosure on every review.</b> Each page states exactly how the item was obtained.</li>
     <li><b>No conflicts of interest.</b> I do not review businesses owned by or employing people I know. If a relationship exists, I skip the review or disclose it.</li>
@@ -297,10 +299,11 @@ def how_money():
   <div class="status"><b>Status as of {e(pretty(SITE["policies_updated"]))}:</b> no ads are running, no affiliate links exist, and the site earns no money. Any change to this will be announced here <i>before</i> it takes effect.</div>
   <h2>What will never change</h2>
   <ul>
-    <li>No affiliate links or commissions on anything I review.</li>
+    <li>No incentive that pays the website or its owners based on the purchase of anything reviewed here: no affiliate links, commissions, referral fees or per-sale payments.</li>
     <li>No payment of any kind from a business, brand or person I review, or from their competitors, in exchange for coverage, placement, ranking or silence.</li>
     <li>No sponsored content, gifts, free stays, free meals or free products.</li>
-    <li>No link between the money the site earns and which products, places or restaurants are reviewed, or how they are scored.</li>
+    <li>No revenue incentive that influences what is reviewed or not reviewed, or whether anything is reviewed positively or negatively.</li>
+    <li>Reviews sourced from the community must follow this same policy, and the community is built with these guiding principles.</li>
     <li>Any association that could create a revenue stream is minimized, and every revenue source is disclosed on this page.</li>
   </ul>
   <h2>If advertising is ever added</h2>
@@ -313,7 +316,7 @@ def how_money():
     <li><b>Reviewed businesses.</b> I will publish the exact rule for ads from businesses I have reviewed before ads start.</li>
   </ul>
   <h2>Other ways the site could be supported</h2>
-  <p>Reader support (donations or memberships) is one option I may explore. Any model I use must pass one test: no revenue is tied to the products, places or restaurants I review. Every source of revenue will be disclosed on this page.</p>
+  <p>Reader support (donations or memberships) is one option I may explore. Any model I use must pass one test: nothing is paid based on purchases of what I review, and no revenue incentive influences what is reviewed or how it is scored. Every source of revenue will be disclosed on this page.</p>
   <h2>Change log</h2>
   <table><tr><th>Date</th><th>Change</th></tr>
     <tr><td>{e(pretty(SITE["policies_updated"]))}</td><td>Policy first written. No income of any kind.</td></tr></table>
@@ -351,9 +354,10 @@ def whats_next():
     return f"""<article class="page">
   <h1>Reader reviews: the plan</h1>
   <p class="samplebar">Draft. Nothing here is live yet.</p>
-  <p>For now, every review is written by one person. The plan is to open the site to reader reviews once the foundation is solid. These are the principles I intend to hold to:</p>
+  <p>For now, every review is written by one person. The plan is to open the site to reader reviews once the foundation is solid. The community will be built on these guiding principles:</p>
   <ul>
     <li><b>Reviews from real experience.</b> Readers will say how they used the product or visited the place.</li>
+    <li><b>Same policy as the site.</b> Every community review must follow the site policy: no one is paid based on purchases of what is reviewed, and no revenue incentive influences what is reviewed or whether it is positive or negative.</li>
     <li><b>No incentives.</b> Nobody can offer, request or reward a review.</li>
     <li><b>Businesses cannot edit or buy their way out.</b> They may respond publicly to a review, and the review stays.</li>
     <li><b>Transparent moderation.</b> Published rules, and a regular report on what was removed and why.</li>
@@ -369,7 +373,7 @@ def whats_next():
     <li><b>No scores from too few voices.</b> A community average appears only after enough independent ratings, with the count always shown.</li>
     <li><b>No republished professional scores.</b> Critics' points and notes are copyrighted, so they are not copied here.</li>
     <li><b>Your own words only.</b> Notes written by AI or copied from elsewhere are not allowed.</li>
-    <li><b>Community kept apart from selling.</b> There are no shop links and no affiliate links, so nothing on the site pushes readers toward buying.</li>
+    <li><b>Community kept apart from selling.</b> There are no shop links, affiliate links or purchase-based payments in reviews or in the community, so nothing pushes readers toward buying.</li>
     <li><b>Cellar tools stay elsewhere.</b> Inventory, bin locations and drinking windows are better handled by CellarTracker, so this site covers published reviews only.</li>
   </ul>
   <p>Want to be told when it opens? Email <b>{e(SITE["contact"])}</b>.</p>
@@ -379,7 +383,7 @@ def about():
     return f"""<article class="page">
   <h1>About</h1>
   <p class="samplebar">Placeholder. Replace this with a short note about why you started the site and what you review. Share only what you are comfortable making public.</p>
-  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was acquired, new reviews are paid for by the reviewer, associations are minimized so no revenue stream can influence what gets reviewed, and all revenue sources are disclosed. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
+  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was acquired, new reviews are paid for by the reviewer, no one is paid based on purchases of what is reviewed, no revenue incentive influences what is reviewed or how it is scored, and reviews from the community must follow the same policy. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
 </article>"""
 
 def not_found():
