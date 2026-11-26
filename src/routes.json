@@ -3,6 +3,9 @@
   "sites": {
     "cellarcommunity.com": {
       "category": "wine"
+    },
+    "ireviewtravel.com": {
+      "category": "travel"
     }
   },
   "moved": [
@@ -18,10 +21,19 @@
         "ramey-cabernet-sauvignon-larkmead-vineyard-2006",
         "white-cottage-ranch-vineyards-cabernet-sauvignon-howell-moun"
       ]
+    },
+    {
+      "host": "ireviewtravel.com",
+      "paths": [
+        "/travel.html"
+      ],
+      "review_ids": [
+        "sample-travel-a",
+        "sample-travel-b"
+      ]
     }
   ],
   "redirects": {
-    "ireviewtravel.com": "https://unpaidreviews.com/travel.html",
     "fivestarcritic.com": "https://unpaidreviews.com/reviews.html"
   }
 }

@@ -17,8 +17,10 @@
     },
     {
       "host": "ireviewtravel.com",
-      "mode": "redirect",
-      "target": "/travel.html"
+      "mode": "category",
+      "category": "travel",
+      "name": "iReview Travel",
+      "tagline": "Trips nobody paid for."
     },
     {
       "host": "fivestarcritic.com",
