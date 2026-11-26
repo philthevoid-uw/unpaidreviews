@@ -21,7 +21,7 @@ async function notFound(env, request, url, prefix) {
 const SECURITY_HEADERS = {
   "Content-Security-Policy": [
     "default-src 'self'", "script-src 'self'",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", "font-src https://fonts.gstatic.com",
+    "style-src 'self' 'unsafe-inline'", "font-src 'self'",
     "img-src 'self' data:", "connect-src 'self'", "object-src 'none'",
     "base-uri 'self'", "form-action 'self'", "frame-ancestors 'none'",
   ].join("; "),
@@ -84,7 +84,7 @@ async function route(request, env) {
     }
 
     // Every domain shares one stylesheet and script; pages and feeds are per domain.
-    const shared = file.startsWith("/css/") || file.startsWith("/js/");
+    const shared = file.startsWith("/css/") || file.startsWith("/js/") || file.startsWith("/fonts/");
     const prefix = site && !shared ? `/_sites/${bare}` : "";
     const target = new URL(url);
     target.pathname = prefix + file;

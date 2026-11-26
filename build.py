@@ -119,9 +119,6 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 <meta property="og:url" content="{canon}">
 <meta name="twitter:card" content="summary">
 <link rel="alternate" type="application/atom+xml" title="{e(NAME)}" href="{root}feed.xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}css/style.css">
 {ld}</head>
 <body>
