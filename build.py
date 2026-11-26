@@ -157,7 +157,7 @@ def home():
 <div class="proof">
   <div><b>0</b><span>affiliate links, ever</span></div>
   <div><b>0</b><span>sponsored reviews or gifts</span></div>
-  <div><b>100%</b><span>paid for by the reviewer</span></div>
+  <div><b>100%</b><span>disclose how the item was acquired</span></div>
   <div><b>Public</b><span>corrections log</span></div>
 </div>
 <h2>Browse by category</h2>
@@ -240,7 +240,7 @@ def review_page(r):
   {("<h2>Scores</h2>" + crit) if crit else ""}
   {('<div class="two"><div class="pro"><h3>What worked</h3><ul>' + bullets(r["worked"]) + '</ul></div><div class="con"><h3>Flaws, but not dealbreakers</h3><ul>' + bullets(r["flaws"]) + '</ul></div></div>') if r["worked"] or r["flaws"] else ""}
   {skip}
-  <div class="prose"><h2>The full story</h2>{"".join(f"<p>{e(p)}</p>" for p in r["body"])}</div>
+  {('<div class="prose"><h2>' + "The full story" + '</h2>' + "".join(f"<p>{e(p)}</p>" for p in r["body"]) + '</div>') if r["body"] else ""}
   <p class="fine">Spotted a mistake? See the <a href="../corrections.html">corrections policy</a>. Read <a href="../how-we-review.html">how I review</a>.</p>
   {rel}
 </article>"""
@@ -273,11 +273,13 @@ def how_review():
   <p>Each review rates four criteria from 1 to 10. The criteria depend on the category:</p>
   <table><tr><th>Category</th><th>Criteria</th></tr>{cat_rows}</table>
   <p>The overall score is a considered judgment, not a mechanical average, and the review explains it.</p>
+  <p><b>Wine quick notes:</b> older bottles from my CellarTracker history appear as short quick notes with a score and, where I wrote one, a tasting note. CellarTracker uses a 100-point scale, so a 90 there is shown here as 9.0 out of 10. Quick notes have no criteria breakdown, and each one says how the bottle was acquired, or that I no longer have a record.</p>
   <p><b>Scale:</b> 9–10 exceptional · 7–8 good · 5–6 mixed · 3–4 poor · 1–2 avoid.</p>
   <h2>Testing standards</h2>
   <ul>
     <li><b>Products:</b> used for a meaningful period before publishing, with the duration stated and at least one alternative compared where possible.</li>
     <li><b>Travel:</b> visited in person, with the dates and season stated and costs given in what I actually paid.</li>
+    <li><b>Wine:</b> tasted with the bottle's vintage, producer and price noted, with how long it was open and how it changed where I tracked that.</li>
     <li><b>Restaurants:</b> visited at least twice where practical, ordering and paying like any customer, without announcing that I write reviews.</li>
   </ul>
   <h2>Every review has the same parts</h2>
@@ -373,7 +375,7 @@ def about():
     return f"""<article class="page">
   <h1>About</h1>
   <p class="samplebar">Placeholder. Replace this with a short note about why you started the site and what you review. Share only what you are comfortable making public.</p>
-  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review is paid for by the reviewer, and no revenue is tied to what gets reviewed. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
+  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was acquired, new reviews are paid for by the reviewer, and no revenue is tied to what gets reviewed. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
 </article>"""
 
 def not_found():

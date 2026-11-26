@@ -385,6 +385,108 @@
         "Describe the wine concretely: color, aroma, texture and finish.",
         "Say how long it was open, how it changed and when you would drink the next bottle."
       ]
+    },
+    {
+      "id": "casanuova-delle-cerbaie-brunello-di-montalcino-2003",
+      "category": "wine",
+      "title": "Casanuova delle Cerbaie Brunello di Montalcino 2003",
+      "subject": "Casanuova delle Cerbaie Brunello di Montalcino",
+      "facts": [
+        "2003",
+        "Casanuova delle Cerbaie",
+        "Sangiovese",
+        "CellarTracker score 90"
+      ],
+      "place": "Brunello di Montalcino, Italy",
+      "date": "2013-03-22",
+      "score": 9.0,
+      "verdict": "Quick note: scored 90 out of 100. I did not write a tasting note for this bottle.",
+      "who_for": "",
+      "method": "",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "worked": [],
+      "flaws": [],
+      "skip": [],
+      "criteria": [],
+      "body": [],
+      "quick": true
+    },
+    {
+      "id": "tony-sasa-brunello-di-montalcino-martina-2007",
+      "category": "wine",
+      "title": "Tony Sasa Brunello di Montalcino Martina 2007",
+      "subject": "Tony Sasa Brunello di Montalcino Martina",
+      "facts": [
+        "2007",
+        "Tony Sasa",
+        "Sangiovese",
+        "CellarTracker score 92"
+      ],
+      "place": "Brunello di Montalcino, Italy",
+      "date": "2013-01-04",
+      "score": 9.2,
+      "verdict": "Quick note: scored 92 out of 100. I did not write a tasting note for this bottle.",
+      "who_for": "",
+      "method": "",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "worked": [],
+      "flaws": [],
+      "skip": [],
+      "criteria": [],
+      "body": [],
+      "quick": true
+    },
+    {
+      "id": "ramey-cabernet-sauvignon-larkmead-vineyard-2006",
+      "category": "wine",
+      "title": "Ramey Cabernet Sauvignon Larkmead Vineyard 2006",
+      "subject": "Ramey Cabernet Sauvignon Larkmead Vineyard",
+      "facts": [
+        "2006",
+        "Ramey",
+        "Cabernet Sauvignon",
+        "CellarTracker score 90"
+      ],
+      "place": "Napa Valley, USA",
+      "date": "2012-12-13",
+      "score": 9.0,
+      "verdict": "Blueberry, black cherry and spicy oak dominate the nose and front of the pallet.",
+      "who_for": "",
+      "method": "",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "worked": [],
+      "flaws": [],
+      "skip": [],
+      "criteria": [],
+      "body": [
+        "Blueberry, black cherry and spicy oak dominate the nose and front of the pallet. Alcohol also very pronounced on the front end. Mid pallet falls a bit flat, but the finish is long and smooth. Notes of pepper, vanilla, and cocoa especially pronounced on the finish. Texture coats the pallet with soft tannins despite the need for extended breathing time (tasted over 6 hours with no decanting). Best after 2 - 3 hours of air then started to decline."
+      ],
+      "quick": false
+    },
+    {
+      "id": "white-cottage-ranch-vineyards-cabernet-sauvignon-howell-moun",
+      "category": "wine",
+      "title": "White Cottage Ranch Vineyards Cabernet Sauvignon Howell Mountain 1998",
+      "subject": "White Cottage Ranch Vineyards Cabernet Sauvignon Howell Mountain",
+      "facts": [
+        "1998",
+        "White Cottage Ranch Vineyards",
+        "Cabernet Sauvignon",
+        "CellarTracker score 91"
+      ],
+      "place": "Howell Mountain, USA",
+      "date": "2012-11-02",
+      "score": 9.1,
+      "verdict": "Quick note: scored 91 out of 100. I did not write a tasting note for this bottle.",
+      "who_for": "",
+      "method": "",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "worked": [],
+      "flaws": [],
+      "skip": [],
+      "criteria": [],
+      "body": [],
+      "quick": true
     }
   ]
 }

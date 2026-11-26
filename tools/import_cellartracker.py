@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Turn a CellarTracker tasting-notes CSV export into DRAFT wine reviews.
 
-Usage:  python3 tools/import_cellartracker.py imports/notes.csv
+Usage:  python3 tools/import_cellartracker.py imports/notes.csv [--quick]
+        (--quick also keeps score-only entries as short quick notes)
 Output: imports/drafts.json  (private, never committed)
 
 Only your own tasting notes are read. Cellar inventory, bin locations, quantities,
@@ -46,7 +47,7 @@ def to_score(s):
 
 def slug(s): return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:60]
 
-def main(path):
+def main(path, quick=False):
     with open(path, newline="", encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
     if not rows: sys.exit("No rows found in that file.")
@@ -58,7 +59,7 @@ def main(path):
     out, used = [], set()
     for r in rows:
         note = (r.get(m["note"]) or "").strip()
-        if not note: continue
+        if not note and not quick: continue
         name = (r.get(m["wine"]) or "").strip()
         vint = (r.get(m["vintage"]) or "").strip() if m["vintage"] else ""
         score, raw = to_score(r.get(m["score"], "")) if m["score"] else (None, None)
@@ -71,17 +72,19 @@ def main(path):
                              (r.get(m["grape"]) or "").strip() if m["grape"] else ""] if x]
         place = ", ".join(x for x in [(r.get(m["region"]) or "").strip() if m["region"] else "",
                                        (r.get(m["country"]) or "").strip() if m["country"] else ""] if x)
-        first = re.split(r"(?<=[.!?])\s", note, maxsplit=1)[0]
+        first = re.split(r"(?<=[.!?])\s", note, maxsplit=1)[0] if note else \
+            f"Quick note: scored {raw:g} out of 100. I did not write a tasting note for this bottle."
         out.append({"id": rid, "category": "wine", "title": title, "subject": name, "facts": facts, "place": place,
                     "date": to_date(r.get(m["date"], "")) if m["date"] else to_date(""), "score": score,
                     "verdict": first[:220], "who_for": "", "method": "", "acquired": "",
                     "worked": [], "flaws": [], "skip": [], "criteria": [],
                     "body": [p.strip() for p in note.split("\n") if p.strip()],
-                    "_source_score": raw, "_needs": "Fill in 'acquired' (how you got the bottle) before publishing."})
+                    "quick": not note, "_source_score": raw, "_needs": "Fill in 'acquired' (how you got the bottle) before publishing."})
     Path("imports").mkdir(exist_ok=True)
     Path("imports/drafts.json").write_text(json.dumps(out, indent=2, ensure_ascii=False))
     print(f"Wrote {len(out)} drafts to imports/drafts.json (skipped notes with no text or no score).")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2: sys.exit(__doc__)
-    main(sys.argv[1])
+    args = [a for a in sys.argv[1:] if a != "--quick"]
+    if len(args) != 1: sys.exit(__doc__)
+    main(args[0], quick="--quick" in sys.argv)
