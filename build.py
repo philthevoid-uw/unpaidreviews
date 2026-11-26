@@ -142,7 +142,7 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
     <li><a href="{root}feed.xml">RSS feed</a></li></ul></div>
   <div><h4>Get involved</h4><ul>
     <li><a href="{root}suggest.html">Suggest the next review</a></li>
-    <li><a href="{root}whats-next.html">Reader reviews: the plan</a></li>
+    <li><a href="{root}whats-next.html">Our reviewers: the plan</a></li>
     <li><a href="{root}about.html">About</a></li>
     <li><a href="mailto:{e(SITE["contact"])}">{e(SITE["contact"])}</a></li></ul></div>
 </div></div></footer>
@@ -222,6 +222,7 @@ def home():
 <p style="margin-top:16px"><a href="reviews.html">Browse all reviews →</a></p>
 <h2>How we protect independence</h2>
 <div class="pillars">
+  <div class="pillar"><h3>Written by screened reviewers</h3><p>Reviews are written by our community of reviewers. Every reviewer is screened to confirm they are a real person, not a bot, and not an employee of, or otherwise funded by, what they review.</p></div>
   <div class="pillar"><h3>No payments that shape reviews</h3><p>We do not accept payments that could influence what a review says. How each item was obtained is disclosed on every review, including anything that was provided or discounted.</p></div>
   <div class="pillar"><h3>Nothing steers what you buy</h3><p>We are not paid for affiliate links, and we do not try to influence the site or your purchase decisions in other ways. No revenue incentive decides what gets reviewed, what is skipped, or whether a review is positive or negative. Reviews from our community follow the same policy.</p></div>
   <div class="pillar"><h3>Advertising is visible</h3><p>Any advertising or paid promotion will be clearly labeled, and we will not be influenced by who does or does not advertise here. <a href="how-we-make-money.html">How the site is funded</a>.</p></div>
@@ -312,6 +313,14 @@ def how_review():
     return f"""<article class="page">
   <h1>How we review</h1>
   <p>Trust is the only thing this site offers, so our rules are written down and apply to every review.</p>
+  <h2>Who writes the reviews</h2>
+  <p>Reviews are written by our community of reviewers, not by the site's owners or a single critic. Before anyone can post, we screen them:</p>
+  <ul>
+    <li><b>Real people.</b> We verify that each reviewer is a real person and not a bot, and we do not allow automated or AI-written reviews.</li>
+    <li><b>Not employees.</b> Reviewers cannot be employees, owners or contractors of the business, brand or place they review, or of its competitors.</li>
+    <li><b>Not funded to review.</b> Reviewers cannot be paid, sponsored or otherwise funded by anyone to provide a review. Reviewers who break these rules are removed and their reviews taken down.</li>
+    <li><b>Disclosed.</b> Each review shows how the reviewer obtained the item or experience.</li>
+  </ul>
   <h2>Independence rules</h2>
   <ul>
     <li><b>No payments that influence a review.</b> We do not accept payments, gifts or perks that could shape what a review says or how it scores.</li>
@@ -319,8 +328,8 @@ def how_review():
     <li><b>No revenue incentive over coverage.</b> No revenue incentive influences what is reviewed or not reviewed, or whether a review is positive or negative.</li>
     <li><b>Advertising is visible.</b> Any advertising or revenue-generating promotion is clearly labeled, and we are not influenced by who does or does not advertise here.</li>
     <li><b>Disclosure on every review.</b> Each page states how the item was obtained, including anything that was provided, discounted or hosted.</li>
-    <li><b>Community reviews follow the same policy.</b> Any review sourced from our community must follow these rules, and the community is built on these guiding principles.</li>
-    <li><b>No conflicts of interest.</b> We do not review businesses owned by or employing people involved in the review. If a relationship exists, we skip the review or disclose it.</li>
+    <li><b>Community reviews follow the same policy.</b> Every review is written by our community, so every review must follow these rules, and the community is built on these guiding principles.</li>
+    <li><b>No conflicts of interest.</b> A reviewer with any relationship to what they review does not review it, or discloses the relationship. We do the same for the site itself.</li>
     <li><b>Associations minimized.</b> We keep any association with a reviewed business, brand or sponsor to a minimum so that no revenue stream can influence a review, and we disclose any that remain.</li>
     <li><b>All revenue sources disclosed.</b> Every way the site earns money is listed on <a href="how-we-make-money.html">how the site is funded</a>.</li>
     <li><b>No pre-publication previews.</b> Businesses never see a review before it goes live, and cannot change an opinion or a score.</li>
@@ -353,7 +362,7 @@ def how_money():
     <li>We do not accept payments that would influence the content of a review, from any business, brand or person we review, or from their competitors, in exchange for coverage, placement, ranking or silence.</li>
     <li>We are not paid for affiliate links, commissions, referral fees or per-sale payments, and we do not try to influence the site or the purchase decisions people make in any other way.</li>
     <li>No revenue incentive influences what is reviewed or not reviewed, or whether anything is reviewed positively or negatively.</li>
-    <li>Reviews sourced from our community must follow this same policy, and the community is built on these guiding principles.</li>
+    <li>Every review is written by our community of screened reviewers, who are real people and not employees of, or funded by, what they review. All reviews follow this same policy, and the community is built on these guiding principles.</li>
     <li>Every revenue source is disclosed on this page, and any association that could create a revenue stream is kept to a minimum.</li>
   </ul>
   <h2>If we run advertising or promotions</h2>
@@ -402,38 +411,39 @@ def suggest():
 
 def whats_next():
     return f"""<article class="page">
-  <h1>Reader reviews: the plan</h1>
+  <h1>Our reviewers: the plan</h1>
   <p class="samplebar">Draft. Nothing here is live yet.</p>
-  <p>For now, reviews come from our small founding group. The plan is to open the site to reader reviews once the foundation is solid. The community will be built on these guiding principles:</p>
+  <p>Reviews on this site are written by our community of reviewers. We are still building that community, and nothing here is live yet. It will be built on these guiding principles:</p>
   <ul>
-    <li><b>Reviews from real experience.</b> Readers will say how they used the product or visited the place.</li>
+    <li><b>Screened reviewers.</b> Every reviewer is screened to confirm they are a real person, not a bot, and not an employee of, or otherwise funded to provide a review of, what they review.</li>
+    <li><b>Reviews from real experience.</b> Reviewers say how they used the product or visited the place, and how they obtained it.</li>
     <li><b>Same policy as the site.</b> Every community review must follow the site policy: no one is paid based on purchases of what is reviewed, and no revenue incentive influences what is reviewed or whether it is positive or negative.</li>
     <li><b>No incentives.</b> Nobody can offer, request or reward a review.</li>
     <li><b>Businesses cannot edit or buy their way out.</b> They may respond publicly to a review, and the review stays.</li>
     <li><b>Transparent moderation.</b> Published rules, and a regular report on what was removed and why.</li>
-    <li><b>Reader and editor ratings stay separate.</b> Our editorial scores will never be blended into the community score.</li>
+    <li><b>One standard for everyone.</b> Every review, including those from the people who run the site, follows the same rules and is scored on the same published criteria.</li>
   </ul>
   <h2>Lessons from wine communities</h2>
   <p>Wine sites such as CellarTracker and Vivino have run large reader communities for years. Here is what we plan to borrow and what we plan to do differently.</p>
   <ul>
     <li><b>Notes tied to a real bottle.</b> A review says which vintage was opened, how it was stored and served, and how it was acquired. One bottle's flaw does not make another reader's review wrong.</li>
-    <li><b>Handles, not real names.</b> Readers choose a public handle. Real names stay private unless the reader chooses to show them.</li>
+    <li><b>Handles, not real names.</b> Reviewers choose a public handle. We verify identity privately when screening, and real names stay private unless the reviewer chooses to show them.</li>
     <li><b>Comments that notify.</b> When someone replies to a comment, the original commenter is told. Community members on existing sites say missing reply alerts are a common frustration.</li>
     <li><b>Follow a taster, not a score.</b> Readers can follow people whose palates match theirs, as on CellarTracker and Vivino, instead of relying on one blended number.</li>
     <li><b>No scores from too few voices.</b> A community average appears only after enough independent ratings, with the count always shown.</li>
     <li><b>No republished professional scores.</b> Critics' points and notes are copyrighted, so they are not copied here.</li>
-    <li><b>Your own words only.</b> Notes written by AI or copied from elsewhere are not allowed.</li>
+    <li><b>Your own words only.</b> Reviews written by AI or copied from elsewhere are not allowed.</li>
     <li><b>Community kept apart from selling.</b> There are no shop links, affiliate links or purchase-based payments in reviews or in the community, so nothing pushes readers toward buying.</li>
     <li><b>Cellar tools stay elsewhere.</b> Inventory, bin locations and drinking windows are better handled by CellarTracker, so this site covers published reviews only.</li>
   </ul>
-  <p>Want to be told when it opens? Email <b>{e(SITE["contact"])}</b>.</p>
+  <p>Want to be told when it opens, or to apply as a reviewer? Email <b>{e(SITE["contact"])}</b>.</p>
 </article>"""
 
 def about():
     return f"""<article class="page">
   <h1>About</h1>
   <p class="samplebar">Placeholder. Replace this with a short note about who we are and why we started this community. Share only what you are comfortable making public.</p>
-  <p>{e(SITE["name"])} is a community that publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was obtained. We do not accept payments that would influence a review, we are not paid for affiliate links, and no revenue incentive influences what is reviewed or how it is scored. Any advertising will be clearly visible, and reviews from our community must follow the same policy. See <a href="how-we-review.html">how we review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
+  <p>{e(SITE["name"])} is a community that publishes independent reviews of products, travel, restaurants and wine, written by screened reviewers who are real people and are not employees of, or funded by, what they review. Every review says how the item was obtained. We do not accept payments that would influence a review, we are not paid for affiliate links, and no revenue incentive influences what is reviewed or how it is scored. Any advertising will be clearly visible, and every review must follow the same policy. See <a href="how-we-review.html">how we review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
 </article>"""
 
 def not_found():
@@ -495,7 +505,7 @@ def build_main():
     write("how-we-make-money.html", page("how-we-make-money.html", f'How the site is funded | {NAME}', "How this site is funded and the rules that keep reviews independent.", how_money(), nav="money"))
     write("corrections.html", page("corrections.html", f'Corrections | {NAME}', "Corrections policy and log.", corrections()))
     write("suggest.html", page("suggest.html", f'Suggest a review | {NAME}', "Tell us what to review next.", suggest()))
-    write("whats-next.html", page("whats-next.html", f'Reader reviews: the plan | {NAME}', "Principles for opening the site to reader reviews.", whats_next()))
+    write("whats-next.html", page("whats-next.html", f'Our reviewers: the plan | {NAME}', "How reviewers are screened and the principles for our review community.", whats_next()))
     write("about.html", page("about.html", f'About | {NAME}', "About this site.", about()))
     write("404.html", page("404.html", f'Not found | {NAME}', "Page not found.", not_found(), noindex=True))
     kept = [r for r in ALL_REVIEWS if host_of(r) == MAIN]
