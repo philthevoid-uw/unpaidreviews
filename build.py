@@ -86,7 +86,7 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 {body}
 </main>
 <footer><div class="wrap"><div class="cols">
-  <div><b>{e(SITE["name"])}</b><br>Independent. Paid for by the reviewer: no affiliate links, no sponsorships, no gifts, no payment that could influence a review.</div>
+  <div><b>{e(SITE["name"])}</b><br>Independent. Paid for by the reviewer: no conflicts of interest, no affiliate links, no sponsorships, no gifts, and all revenue sources disclosed.</div>
   <div><h4>Read</h4><ul>
     <li><a href="{root}how-we-review.html">How I review</a></li>
     <li><a href="{root}how-we-make-money.html">How the site is funded</a></li>
@@ -158,6 +158,7 @@ def home():
   <div><b>0</b><span>affiliate links, ever</span></div>
   <div><b>0</b><span>sponsored reviews or gifts</span></div>
   <div><b>100%</b><span>disclose how the item was acquired</span></div>
+  <div><b>All</b><span>revenue sources disclosed</span></div>
   <div><b>Public</b><span>corrections log</span></div>
 </div>
 <h2>Browse by category</h2>
@@ -171,7 +172,7 @@ def home():
 <h2>How I protect independence</h2>
 <div class="pillars">
   <div class="pillar"><h3>I pay for everything</h3><p>Products are bought at retail. Meals and trips are paid in full, with no reviewer discounts and no tourism-board hosting.</p></div>
-  <div class="pillar"><h3>Nothing is for sale</h3><p>No affiliate links, no sponsored content and no payment that could influence what I say or how I score. Revenue, if any, is never tied to what is reviewed.</p></div>
+  <div class="pillar"><h3>Nothing is for sale</h3><p>No affiliate links, no sponsored content and no payment that could influence what I say or how I score. Any association that could create a revenue stream is minimized, and every revenue source is disclosed.</p></div>
   <div class="pillar"><h3>Mistakes are public</h3><p>Errors are fixed in the open and logged on the <a href="corrections.html">corrections page</a>. Scores are never changed because someone complained.</p></div>
 </div>
 <div class="band">
@@ -265,7 +266,9 @@ def how_review():
     <li><b>No affiliate links.</b> I earn nothing when you click or buy.</li>
     <li><b>No sponsored content, gifts, comps or press trips.</b> If something is given to me without being asked (a free dessert, an upgrade), I say so at the top of the review.</li>
     <li><b>Disclosure on every review.</b> Each page states exactly how the item was obtained.</li>
-    <li><b>No conflicts.</b> I do not review businesses owned by or employing people I know. If a relationship exists, I skip the review or disclose it.</li>
+    <li><b>No conflicts of interest.</b> I do not review businesses owned by or employing people I know. If a relationship exists, I skip the review or disclose it.</li>
+    <li><b>Associations minimized.</b> I keep any association with a reviewed business, brand or sponsor to a minimum so that no revenue stream can influence a review, and I disclose any that remain.</li>
+    <li><b>All revenue sources disclosed.</b> Every way the site earns money is listed on <a href="how-we-make-money.html">how the site is funded</a>.</li>
     <li><b>No pre-publication previews.</b> Businesses never see a review before it goes live, and cannot change an opinion or a score.</li>
   </ul>
   <p>How the site pays for itself is covered on a separate page: <a href="how-we-make-money.html">how the site is funded</a>.</p>
@@ -298,6 +301,7 @@ def how_money():
     <li>No payment of any kind from a business, brand or person I review, or from their competitors, in exchange for coverage, placement, ranking or silence.</li>
     <li>No sponsored content, gifts, free stays, free meals or free products.</li>
     <li>No link between the money the site earns and which products, places or restaurants are reviewed, or how they are scored.</li>
+    <li>Any association that could create a revenue stream is minimized, and every revenue source is disclosed on this page.</li>
   </ul>
   <h2>If advertising is ever added</h2>
   <p>I am considering whether to run advertising. I have not decided. If I do, these rules will apply, and I will publish the specific details on this page before any ad runs:</p>
@@ -309,7 +313,7 @@ def how_money():
     <li><b>Reviewed businesses.</b> I will publish the exact rule for ads from businesses I have reviewed before ads start.</li>
   </ul>
   <h2>Other ways the site could be supported</h2>
-  <p>Reader support (donations or memberships) is one option I may explore. Any model I use must pass one test: no revenue is tied to the products, places or restaurants I review.</p>
+  <p>Reader support (donations or memberships) is one option I may explore. Any model I use must pass one test: no revenue is tied to the products, places or restaurants I review. Every source of revenue will be disclosed on this page.</p>
   <h2>Change log</h2>
   <table><tr><th>Date</th><th>Change</th></tr>
     <tr><td>{e(pretty(SITE["policies_updated"]))}</td><td>Policy first written. No income of any kind.</td></tr></table>
@@ -375,7 +379,7 @@ def about():
     return f"""<article class="page">
   <h1>About</h1>
   <p class="samplebar">Placeholder. Replace this with a short note about why you started the site and what you review. Share only what you are comfortable making public.</p>
-  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was acquired, new reviews are paid for by the reviewer, and no revenue is tied to what gets reviewed. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
+  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was acquired, new reviews are paid for by the reviewer, associations are minimized so no revenue stream can influence what gets reviewed, and all revenue sources are disclosed. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
 </article>"""
 
 def not_found():
