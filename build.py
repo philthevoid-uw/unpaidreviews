@@ -148,7 +148,7 @@ def home():
     latest = "\n  ".join(card(r) for r in sorted_reviews()[:6])
     return f"""<section class="hero">
   <h1>{e(SITE["tagline"])}</h1>
-  <p class="lead">Products, travel, restaurants and wine, bought and visited with my own money, scored on published criteria, with every conflict of interest disclosed.</p>
+  <p class="lead">Products, travel, restaurants and wine, bought and visited with my own money, scored on published criteria, with no conflicts of interest, and any associations minimized to prevent any influencing revenue streams and all revenue sources disclosed.</p>
   <form class="searchbar" action="reviews.html" method="get" role="search">
     <input type="search" name="q" placeholder="Search products, places, restaurants…" aria-label="Search reviews">
     <button class="btn" type="submit">Search</button>
