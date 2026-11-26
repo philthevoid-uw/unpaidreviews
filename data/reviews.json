@@ -3,8 +3,9 @@
     "name": "Unpaid Reviews",
     "domain": "unpaidreviews.com",
     "tagline": "Reviews nobody paid for.",
-    "description": "Products, travel, restaurants and wine, bought and visited with my own money, scored on published criteria, with no conflicts of interest, and any associations minimized to prevent any influencing revenue streams and all revenue sources disclosed.",
+    "description": "A community reviewing products, travel, restaurants and wine, scored on published criteria. We accept no payments that influence a review, earn nothing from affiliate links, make any advertising clearly visible, and disclose all revenue sources.",
     "contact": "hello@unpaidreviews.com",
+    "banner": "This site is not finished, and real content will not be added until it is ready. Anything you see now is a sample or an early draft.",
     "policies_updated": "2026-11-24"
   },
   "domains": [
@@ -32,53 +33,53 @@
     {
       "slug": "products",
       "name": "Products",
-      "blurb": "Things bought at normal price and used long enough to know.",
+      "blurb": "Products used long enough to know, reviewed with no one paying for the verdict.",
       "criteria": [
         "Performance",
         "Value",
         "Durability",
         "Ease of use"
       ],
-      "method_label": "How I tested it",
+      "method_label": "How we tested it",
       "kind": "Product"
     },
     {
       "slug": "travel",
       "name": "Travel",
-      "blurb": "Places I paid to visit, with the real costs, crowds and logistics.",
+      "blurb": "Places worth the trip, with the real costs, crowds and logistics.",
       "criteria": [
         "Experience",
         "Value",
         "Getting around",
         "Crowds and authenticity"
       ],
-      "method_label": "How I visited",
+      "method_label": "How we visited",
       "kind": "Place"
     },
     {
       "slug": "restaurants",
       "name": "Restaurants",
-      "blurb": "Meals I paid for, usually more than once, ordered like any customer.",
+      "blurb": "Meals ordered like any customer, usually more than once.",
       "criteria": [
         "Food",
         "Service",
         "Atmosphere",
         "Value"
       ],
-      "method_label": "How I visited",
+      "method_label": "How we visited",
       "kind": "Restaurant"
     },
     {
       "slug": "wine",
       "name": "Wine",
-      "blurb": "Bottles I bought and drank, scored blind to price where I can and always with the cost disclosed.",
+      "blurb": "Bottles opened and tasted, scored blind to price where we can and always with the cost disclosed.",
       "criteria": [
         "Aroma",
         "Palate",
         "Finish",
         "Value"
       ],
-      "method_label": "How I tasted it",
+      "method_label": "How we tasted it",
       "kind": "Product"
     }
   ],
@@ -96,7 +97,7 @@
       "verdict": "One-sentence bottom line goes here: who it is for, and who should skip it.",
       "who_for": "Say who gets the most out of this, in one or two sentences.",
       "method": "State how long you used it and how. Specifics beat adjectives.",
-      "acquired": "Bought at full retail price with my own money.",
+      "acquired": "Say how the item was obtained, and whether anything was provided or discounted.",
       "worked": [
         "A strength you actually observed",
         "Another specific strength"
@@ -278,7 +279,7 @@
       "verdict": "What to order, what to avoid, and whether it is worth the price.",
       "who_for": "A relaxed dinner for two or a small group.",
       "method": "Visited twice: a Tuesday and a Saturday. Ordered full meals each time.",
-      "acquired": "Paid the full bill both times. Reserved under a normal name and did not say I write reviews.",
+      "acquired": "Say how the visit was arranged, and disclose any discount, comp or hosting.",
       "worked": [
         "Standout dish, named specifically"
       ],
@@ -324,7 +325,7 @@
       "verdict": "Fast and cheap. Good, not special.",
       "who_for": "A quick lunch.",
       "method": "Two weekday lunches.",
-      "acquired": "Paid in full. Nobody there knew I was reviewing.",
+      "acquired": "Say how the trip was arranged, and disclose any discount, comp or hosting.",
       "worked": [
         "Broth had real depth"
       ],
@@ -374,7 +375,7 @@
       "verdict": "Whether the bottle is worth its price, and when to drink it.",
       "who_for": "Weeknight dinners or a gift for someone who likes balanced reds.",
       "method": "Opened over two evenings, decanted for 30 minutes the first night, served at cellar temperature.",
-      "acquired": "Bought at retail with my own money. No samples, no discounts for reviewers.",
+      "acquired": "Say how the bottle was obtained, and whether anything was provided or discounted.",
       "worked": [
         "A specific aroma or flavor, named concretely"
       ],
@@ -421,10 +422,10 @@
       "place": "Brunello di Montalcino, Italy",
       "date": "2013-03-22",
       "score": 9.0,
-      "verdict": "Quick note: scored 90 out of 100. I did not write a tasting note for this bottle.",
+      "verdict": "Quick note: scored 90 out of 100. No tasting note was written for this bottle.",
       "who_for": "",
       "method": "",
-      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. We no longer have a record of where each bottle came from, so we cannot confirm how it was acquired.",
       "worked": [],
       "flaws": [],
       "skip": [],
@@ -446,10 +447,10 @@
       "place": "Brunello di Montalcino, Italy",
       "date": "2013-01-04",
       "score": 9.2,
-      "verdict": "Quick note: scored 92 out of 100. I did not write a tasting note for this bottle.",
+      "verdict": "Quick note: scored 92 out of 100. No tasting note was written for this bottle.",
       "who_for": "",
       "method": "",
-      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. We no longer have a record of where each bottle came from, so we cannot confirm how it was acquired.",
       "worked": [],
       "flaws": [],
       "skip": [],
@@ -474,7 +475,7 @@
       "verdict": "Blueberry, black cherry and spicy oak dominate the nose and front of the pallet.",
       "who_for": "",
       "method": "",
-      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. We no longer have a record of where each bottle came from, so we cannot confirm how it was acquired.",
       "worked": [],
       "flaws": [],
       "skip": [],
@@ -498,10 +499,10 @@
       "place": "Howell Mountain, USA",
       "date": "2012-11-02",
       "score": 9.1,
-      "verdict": "Quick note: scored 91 out of 100. I did not write a tasting note for this bottle.",
+      "verdict": "Quick note: scored 91 out of 100. No tasting note was written for this bottle.",
       "who_for": "",
       "method": "",
-      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. I no longer have a record of where each bottle came from, so I cannot confirm how it was acquired.",
+      "acquired": "Tasted in 2012 or 2013 and logged on CellarTracker. We no longer have a record of where each bottle came from, so we cannot confirm how it was acquired.",
       "worked": [],
       "flaws": [],
       "skip": [],

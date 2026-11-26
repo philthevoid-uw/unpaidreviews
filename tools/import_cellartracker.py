@@ -73,7 +73,7 @@ def main(path, quick=False):
         place = ", ".join(x for x in [(r.get(m["region"]) or "").strip() if m["region"] else "",
                                        (r.get(m["country"]) or "").strip() if m["country"] else ""] if x)
         first = re.split(r"(?<=[.!?])\s", note, maxsplit=1)[0] if note else \
-            f"Quick note: scored {raw:g} out of 100. I did not write a tasting note for this bottle."
+            f"Quick note: scored {raw:g} out of 100. No tasting note was written for this bottle."
         out.append({"id": rid, "category": "wine", "title": title, "subject": name, "facts": facts, "place": place,
                     "date": to_date(r.get(m["date"], "")) if m["date"] else to_date(""), "score": score,
                     "verdict": first[:220], "who_for": "", "method": "", "acquired": "",

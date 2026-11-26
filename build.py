@@ -78,10 +78,10 @@ def sorted_reviews(items=None):
 def main_nav():
     return [("reviews.html", "All reviews", "reviews")] + \
            [((f'https://{CAT_DOMAIN[c["slug"]]["host"]}/' if c["slug"] in CAT_DOMAIN else f'{c["slug"]}.html'), c["name"], c["slug"]) for c in ALL_CATS] + \
-           [("how-we-review.html", "How I review", "how"), ("how-we-make-money.html", "Funding", "money")]
+           [("how-we-review.html", "How we review", "how"), ("how-we-make-money.html", "Funding", "money")]
 
 def category_nav(d):
-    return [("index.html", "All reviews", "home"), ("how-we-review.html", "How I review", "how"),
+    return [("index.html", "All reviews", "home"), ("how-we-review.html", "How we review", "how"),
             ("how-we-make-money.html", "Funding", "money"), (f"https://{MAIN}/", f"{SITE['name']} ↗", "parent")]
 
 NAV = main_nav()
@@ -102,6 +102,8 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
         f'<a href="{href if href.startswith("http") else root + href}"' + (' aria-current="page"' if nav == key else "") + f">{e(label)}</a>"
         for href, label, key in NAV)
     canon = f"{BASE}/{'' if path == 'index.html' else path}"
+    banner = (f'<div class="construction" role="status"><b>Under construction.</b> {e(SITE["banner"])}</div>\n'
+              if SITE.get("banner") else "")
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -124,7 +126,7 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 {ld}</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site"><div class="wrap">
+{banner}<header class="site"><div class="wrap">
   <a class="brand" href="{root}index.html">{brand_html()}</a>
   <nav aria-label="Main">{links}</nav>
 </div></header>
@@ -132,9 +134,9 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 {body}
 </main>
 <footer><div class="wrap"><div class="cols">
-  <div><b>{e(NAME)}</b><br>Independent. No one pays this site or its owners based on purchases of what is reviewed, and no revenue incentive decides what is reviewed or how it is scored.</div>
+  <div><b>{e(NAME)}</b><br>Independent. We do not accept payments that influence reviews or earn money from affiliate links, any advertising is clearly visible, and no revenue incentive decides what is reviewed or how it is scored.</div>
   <div><h4>Read</h4><ul>
-    <li><a href="{root}how-we-review.html">How I review</a></li>
+    <li><a href="{root}how-we-review.html">How we review</a></li>
     <li><a href="{root}how-we-make-money.html">How the site is funded</a></li>
     <li><a href="{root}corrections.html">Corrections</a></li>
     <li><a href="{root}feed.xml">RSS feed</a></li></ul></div>
@@ -197,7 +199,7 @@ def home():
     latest = "\n  ".join(card(r) for r in sorted_reviews()[:6])
     return f"""<section class="hero">
   <h1>{e(SITE["tagline"])}</h1>
-  <p class="lead">Products, travel, restaurants and wine, bought and visited with my own money, scored on published criteria, with no conflicts of interest, and any associations minimized to prevent any influencing revenue streams and all revenue sources disclosed.</p>
+  <p class="lead">{e(SITE["description"])}</p>
   <form class="searchbar" action="reviews.html" method="get" role="search">
     <input type="search" name="q" placeholder="Search products, places, restaurants…" aria-label="Search reviews">
     <button class="btn" type="submit">Search</button>
@@ -218,14 +220,15 @@ def home():
   {latest}
 </div>
 <p style="margin-top:16px"><a href="reviews.html">Browse all reviews →</a></p>
-<h2>How I protect independence</h2>
+<h2>How we protect independence</h2>
 <div class="pillars">
-  <div class="pillar"><h3>I pay for everything</h3><p>Products are bought at retail. Meals and trips are paid in full, with no reviewer discounts and no tourism-board hosting.</p></div>
-  <div class="pillar"><h3>Nothing is for sale</h3><p>Neither this site nor its owners are paid when you buy something I review. No revenue incentive decides what gets reviewed, what is skipped, or whether a review is positive or negative. Reader reviews follow the same policy.</p></div>
+  <div class="pillar"><h3>No payments that shape reviews</h3><p>We do not accept payments that could influence what a review says. How each item was obtained is disclosed on every review, including anything that was provided or discounted.</p></div>
+  <div class="pillar"><h3>Nothing steers what you buy</h3><p>We are not paid for affiliate links, and we do not try to influence the site or your purchase decisions in other ways. No revenue incentive decides what gets reviewed, what is skipped, or whether a review is positive or negative. Reviews from our community follow the same policy.</p></div>
+  <div class="pillar"><h3>Advertising is visible</h3><p>Any advertising or paid promotion will be clearly labeled, and we will not be influenced by who does or does not advertise here. <a href="how-we-make-money.html">How the site is funded</a>.</p></div>
   <div class="pillar"><h3>Mistakes are public</h3><p>Errors are fixed in the open and logged on the <a href="corrections.html">corrections page</a>. Scores are never changed because someone complained.</p></div>
 </div>
 <div class="band">
-  <div><h2>You pick what's next</h2><p>Tell me what to buy, visit or eat. Suggestions from the businesses involved are ignored.</p></div>
+  <div><h2>You help pick what's next</h2><p>Tell us what to buy, visit or eat. Suggestions from the businesses involved are ignored.</p></div>
   <a class="btn" href="suggest.html">Suggest a review</a>
 </div>"""
 
@@ -270,7 +273,7 @@ def review_page(r):
     facts = " · ".join(x for x in [r["subject"], *r.get("facts", []), r.get("place", ""), r.get("price", "")] if x)
     updated = f' · Updated {e(pretty(r["updated"]))}' if r.get("updated") else ""
     sample = ' <span class="badge">SAMPLE</span>' if r.get("sample") else ""
-    skip = (f'<h2>What I would skip</h2><ul>{bullets(r["skip"])}</ul>') if r.get("skip") else ""
+    skip = (f'<h2>What we would skip</h2><ul>{bullets(r["skip"])}</ul>') if r.get("skip") else ""
     related = [x for x in sorted_reviews() if x["category"] == r["category"] and x["id"] != r["id"]][:2]
     rel = ""
     if related:
@@ -291,7 +294,7 @@ def review_page(r):
   {('<div class="two"><div class="pro"><h3>What worked</h3><ul>' + bullets(r["worked"]) + '</ul></div><div class="con"><h3>Flaws, but not dealbreakers</h3><ul>' + bullets(r["flaws"]) + '</ul></div></div>') if r["worked"] or r["flaws"] else ""}
   {skip}
   {('<div class="prose"><h2>' + "The full story" + '</h2>' + "".join(f"<p>{e(p)}</p>" for p in r["body"]) + '</div>') if r["body"] else ""}
-  <p class="fine">Spotted a mistake? See the <a href="../corrections.html">corrections policy</a>. Read <a href="../how-we-review.html">how I review</a>.</p>
+  <p class="fine">Spotted a mistake? See the <a href="../corrections.html">corrections policy</a>. Read <a href="../how-we-review.html">how we review</a>.</p>
   {rel}
 </article>"""
     ld = None
@@ -307,37 +310,36 @@ def review_page(r):
 def how_review():
     cat_rows = "".join(f'<tr><td><b>{e(c["name"])}</b></td><td>{e(", ".join(c["criteria"]))}</td></tr>' for c in CATS)
     return f"""<article class="page">
-  <h1>How I review</h1>
-  <p>Trust is the only thing this site offers, so the rules are written down and apply to every review.</p>
+  <h1>How we review</h1>
+  <p>Trust is the only thing this site offers, so our rules are written down and apply to every review.</p>
   <h2>Independence rules</h2>
   <ul>
-    <li><b>I pay my own way.</b> Products are bought at normal retail price. Meals, hotels and tours are paid in full.</li>
-    <li><b>No payment based on purchases.</b> There are no affiliate links, commissions or referral fees. Neither the site nor its owners earn anything when you click or buy something reviewed here.</li>
+    <li><b>No payments that influence a review.</b> We do not accept payments, gifts or perks that could shape what a review says or how it scores.</li>
+    <li><b>No affiliate income.</b> We are not paid for affiliate links, commissions or referral fees, and we do not try to influence the site or anyone's purchase decisions in other ways.</li>
     <li><b>No revenue incentive over coverage.</b> No revenue incentive influences what is reviewed or not reviewed, or whether a review is positive or negative.</li>
-    <li><b>Community reviews follow the same policy.</b> Any review sourced from the community must adhere to these rules, and the community is built on these guiding principles.</li>
-    <li><b>No sponsored content, gifts, comps or press trips.</b> If something is given to me without being asked (a free dessert, an upgrade), I say so at the top of the review.</li>
-    <li><b>Disclosure on every review.</b> Each page states exactly how the item was obtained.</li>
-    <li><b>No conflicts of interest.</b> I do not review businesses owned by or employing people I know. If a relationship exists, I skip the review or disclose it.</li>
-    <li><b>Associations minimized.</b> I keep any association with a reviewed business, brand or sponsor to a minimum so that no revenue stream can influence a review, and I disclose any that remain.</li>
+    <li><b>Advertising is visible.</b> Any advertising or revenue-generating promotion is clearly labeled, and we are not influenced by who does or does not advertise here.</li>
+    <li><b>Disclosure on every review.</b> Each page states how the item was obtained, including anything that was provided, discounted or hosted.</li>
+    <li><b>Community reviews follow the same policy.</b> Any review sourced from our community must follow these rules, and the community is built on these guiding principles.</li>
+    <li><b>No conflicts of interest.</b> We do not review businesses owned by or employing people involved in the review. If a relationship exists, we skip the review or disclose it.</li>
+    <li><b>Associations minimized.</b> We keep any association with a reviewed business, brand or sponsor to a minimum so that no revenue stream can influence a review, and we disclose any that remain.</li>
     <li><b>All revenue sources disclosed.</b> Every way the site earns money is listed on <a href="how-we-make-money.html">how the site is funded</a>.</li>
     <li><b>No pre-publication previews.</b> Businesses never see a review before it goes live, and cannot change an opinion or a score.</li>
   </ul>
-  <p>How the site pays for itself is covered on a separate page: <a href="how-we-make-money.html">how the site is funded</a>.</p>
   <h2>How scoring works</h2>
   <p>Each review rates four criteria from 1 to 10. The criteria depend on the category:</p>
   <table><tr><th>Category</th><th>Criteria</th></tr>{cat_rows}</table>
   <p>The overall score is a considered judgment, not a mechanical average, and the review explains it.</p>
-  <p><b>Wine quick notes:</b> older bottles from my CellarTracker history appear as short quick notes with a score and, where I wrote one, a tasting note. CellarTracker uses a 100-point scale, so a 90 there is shown here as 9.0 out of 10. Quick notes have no criteria breakdown, and each one says how the bottle was acquired, or that I no longer have a record.</p>
+  <p><b>Wine quick notes:</b> older bottles from our CellarTracker history appear as short quick notes with a score and, where one was written, a tasting note. CellarTracker uses a 100-point scale, so a 90 there is shown here as 9.0 out of 10. Quick notes have no criteria breakdown, and each one says how the bottle was acquired, or that we no longer have a record.</p>
   <p><b>Scale:</b> 9–10 exceptional · 7–8 good · 5–6 mixed · 3–4 poor · 1–2 avoid.</p>
   <h2>Testing standards</h2>
   <ul>
     <li><b>Products:</b> used for a meaningful period before publishing, with the duration stated and at least one alternative compared where possible.</li>
-    <li><b>Travel:</b> visited in person, with the dates and season stated and costs given in what I actually paid.</li>
-    <li><b>Wine:</b> tasted with the bottle's vintage, producer and price noted, with how long it was open and how it changed where I tracked that.</li>
-    <li><b>Restaurants:</b> visited at least twice where practical, ordering and paying like any customer, without announcing that I write reviews.</li>
+    <li><b>Travel:</b> visited in person, with the dates and season stated, costs given, and any discount, comp or hosting disclosed.</li>
+    <li><b>Wine:</b> tasted with the bottle's vintage, producer and price noted, with how long it was open and how it changed where we tracked that.</li>
+    <li><b>Restaurants:</b> visited at least twice where practical, ordering like any customer, without announcing that we write reviews.</li>
   </ul>
   <h2>Every review has the same parts</h2>
-  <p>Bottom line, who it is for, how I tested or visited, scores, what worked, flaws but not dealbreakers, and what I would skip. Using one format makes reviews comparable and makes it harder to hide a weak spot.</p>
+  <p>Bottom line, who it is for, how we tested or visited, scores, what worked, flaws but not dealbreakers, and what we would skip. Using one format makes reviews comparable and makes it harder to hide a weak spot.</p>
   <h2>Updates and corrections</h2>
   <p>Reviews are dated and updated when things change. Errors are corrected in the open: see <a href="corrections.html">corrections</a>.</p>
 </article>"""
@@ -348,24 +350,23 @@ def how_money():
   <div class="status"><b>Status as of {e(pretty(SITE["policies_updated"]))}:</b> no ads are running, no affiliate links exist, and the site earns no money. Any change to this will be announced here <i>before</i> it takes effect.</div>
   <h2>What will never change</h2>
   <ul>
-    <li>No incentive that pays the website or its owners based on the purchase of anything reviewed here: no affiliate links, commissions, referral fees or per-sale payments.</li>
-    <li>No payment of any kind from a business, brand or person I review, or from their competitors, in exchange for coverage, placement, ranking or silence.</li>
-    <li>No sponsored content, gifts, free stays, free meals or free products.</li>
-    <li>No revenue incentive that influences what is reviewed or not reviewed, or whether anything is reviewed positively or negatively.</li>
-    <li>Reviews sourced from the community must follow this same policy, and the community is built with these guiding principles.</li>
-    <li>Any association that could create a revenue stream is minimized, and every revenue source is disclosed on this page.</li>
+    <li>We do not accept payments that would influence the content of a review, from any business, brand or person we review, or from their competitors, in exchange for coverage, placement, ranking or silence.</li>
+    <li>We are not paid for affiliate links, commissions, referral fees or per-sale payments, and we do not try to influence the site or the purchase decisions people make in any other way.</li>
+    <li>No revenue incentive influences what is reviewed or not reviewed, or whether anything is reviewed positively or negatively.</li>
+    <li>Reviews sourced from our community must follow this same policy, and the community is built on these guiding principles.</li>
+    <li>Every revenue source is disclosed on this page, and any association that could create a revenue stream is kept to a minimum.</li>
   </ul>
-  <h2>If advertising is ever added</h2>
-  <p>I am considering whether to run advertising. I have not decided. If I do, these rules will apply, and I will publish the specific details on this page before any ad runs:</p>
+  <h2>If we run advertising or promotions</h2>
+  <p>We have not decided whether to run advertising or other revenue-generating promotions. If we do, these rules apply, and we will publish the specific details on this page before any ad or promotion runs:</p>
   <ul>
-    <li><b>Automated, with no deals.</b> Ads are bought and priced automatically through an ad marketplace. There is no sales team, no negotiated pricing and no special terms for anyone.</li>
-    <li><b>No favoritism and no penalties.</b> Neither pricing nor ad placement depends on what I have reviewed, what I plan to review, or how anything was scored. Advertisers get no advance look at reviews and no influence over them.</li>
-    <li><b>Same rules for every advertiser.</b> I will not hand-pick advertisers. Any restrictions will be broad categories applied site-wide (for example, no gambling ads) and listed publicly.</li>
-    <li><b>Clearly labeled and separate.</b> Ads will be marked as ads and kept out of review text.</li>
-    <li><b>Reviewed businesses.</b> I will publish the exact rule for ads from businesses I have reviewed before ads start.</li>
+    <li><b>Clearly visible.</b> Ads and paid promotions are labeled as such and kept separate from review text.</li>
+    <li><b>Not influenced by advertisers.</b> Who does or does not advertise has no effect on what we review, what we skip, or how anything is scored. Advertisers get no advance look at reviews and no influence over them.</li>
+    <li><b>No favoritism and no penalties.</b> Neither pricing nor ad placement depends on what we have reviewed, what we plan to review, or how anything was scored.</li>
+    <li><b>Same rules for every advertiser.</b> Ads are sold on the same terms to everyone, with no negotiated deals. Any restrictions are broad categories applied site-wide (for example, no gambling ads) and listed publicly.</li>
+    <li><b>Reviewed businesses.</b> We will publish the exact rule for ads from businesses we have reviewed before ads start.</li>
   </ul>
   <h2>Other ways the site could be supported</h2>
-  <p>Reader support (donations or memberships) is one option I may explore. Any model I use must pass one test: nothing is paid based on purchases of what I review, and no revenue incentive influences what is reviewed or how it is scored. Every source of revenue will be disclosed on this page.</p>
+  <p>Reader support (donations or memberships) is one option we may explore. Any model we use must pass one test: nothing is paid based on purchases of what we review, and no revenue incentive influences what is reviewed or how it is scored. Every source of revenue will be disclosed on this page.</p>
   <h2>Change log</h2>
   <table><tr><th>Date</th><th>Change</th></tr>
     <tr><td>{e(pretty(SITE["policies_updated"]))}</td><td>Policy first written. No income of any kind.</td></tr></table>
@@ -380,7 +381,7 @@ def corrections():
         log = '<p class="empty" style="padding:20px;text-align:left">No corrections yet.</p>'
     return f"""<article class="page">
   <h1>Corrections</h1>
-  <p>If I get a fact wrong, I fix it, add a visible note on the review, and list it here. Businesses may point out factual errors (wrong price, wrong hours, wrong dish). They cannot change an opinion or a score.</p>
+  <p>If we get a fact wrong, we fix it, add a visible note on the review, and list it here. Businesses may point out factual errors (wrong price, wrong hours, wrong dish). They cannot change an opinion or a score.</p>
   <p>To report an error, email <a href="mailto:{e(SITE["contact"])}">{e(SITE["contact"])}</a>.</p>
   <h2>Corrections log</h2>
   {log}
@@ -389,10 +390,10 @@ def corrections():
 def suggest():
     return f"""<article class="page">
   <h1>Suggest the next review</h1>
-  <p>Tell me what to buy, visit or eat. I read every suggestion and choose based on how many readers want it, not on who is asking.</p>
+  <p>Tell us what to buy, visit or eat. We read every suggestion and choose based on how many readers want it, not on who is asking.</p>
   <ul>
     <li>Suggestions from the business, brand or people involved are ignored.</li>
-    <li>I pay for everything I review, so I cannot promise to get to every request.</li>
+    <li>We cannot promise to get to every request.</li>
     <li>Include the exact product, place or restaurant, and what you want to know.</li>
   </ul>
   <p><a class="btn" href="mailto:{e(SITE["contact"])}?subject=Review%20suggestion">Email a suggestion</a></p>
@@ -403,17 +404,17 @@ def whats_next():
     return f"""<article class="page">
   <h1>Reader reviews: the plan</h1>
   <p class="samplebar">Draft. Nothing here is live yet.</p>
-  <p>For now, every review is written by one person. The plan is to open the site to reader reviews once the foundation is solid. The community will be built on these guiding principles:</p>
+  <p>For now, reviews come from our small founding group. The plan is to open the site to reader reviews once the foundation is solid. The community will be built on these guiding principles:</p>
   <ul>
     <li><b>Reviews from real experience.</b> Readers will say how they used the product or visited the place.</li>
     <li><b>Same policy as the site.</b> Every community review must follow the site policy: no one is paid based on purchases of what is reviewed, and no revenue incentive influences what is reviewed or whether it is positive or negative.</li>
     <li><b>No incentives.</b> Nobody can offer, request or reward a review.</li>
     <li><b>Businesses cannot edit or buy their way out.</b> They may respond publicly to a review, and the review stays.</li>
     <li><b>Transparent moderation.</b> Published rules, and a regular report on what was removed and why.</li>
-    <li><b>Reader and editor ratings stay separate.</b> My scores will never be blended into the community score.</li>
+    <li><b>Reader and editor ratings stay separate.</b> Our editorial scores will never be blended into the community score.</li>
   </ul>
   <h2>Lessons from wine communities</h2>
-  <p>Wine sites such as CellarTracker and Vivino have run large reader communities for years. Here is what I plan to borrow and what I plan to do differently.</p>
+  <p>Wine sites such as CellarTracker and Vivino have run large reader communities for years. Here is what we plan to borrow and what we plan to do differently.</p>
   <ul>
     <li><b>Notes tied to a real bottle.</b> A review says which vintage was opened, how it was stored and served, and how it was acquired. One bottle's flaw does not make another reader's review wrong.</li>
     <li><b>Handles, not real names.</b> Readers choose a public handle. Real names stay private unless the reader chooses to show them.</li>
@@ -431,8 +432,8 @@ def whats_next():
 def about():
     return f"""<article class="page">
   <h1>About</h1>
-  <p class="samplebar">Placeholder. Replace this with a short note about why you started the site and what you review. Share only what you are comfortable making public.</p>
-  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was acquired, new reviews are paid for by the reviewer, no one is paid based on purchases of what is reviewed, no revenue incentive influences what is reviewed or how it is scored, and reviews from the community must follow the same policy. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
+  <p class="samplebar">Placeholder. Replace this with a short note about who we are and why we started this community. Share only what you are comfortable making public.</p>
+  <p>{e(SITE["name"])} is a community that publishes independent reviews of products, travel, restaurants and wine. Every review says how the item was obtained. We do not accept payments that would influence a review, we are not paid for affiliate links, and no revenue incentive influences what is reviewed or how it is scored. Any advertising will be clearly visible, and reviews from our community must follow the same policy. See <a href="how-we-review.html">how we review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
 </article>"""
 
 def not_found():
@@ -490,10 +491,10 @@ def build_main():
         if c["slug"] in CAT_DOMAIN:
             continue  # lives on its own domain; src/worker.js redirects the old path
         write(f'{c["slug"]}.html', page(f'{c["slug"]}.html', f'{c["name"]} reviews | {NAME}', c["blurb"], category_page(c), nav=c["slug"]))
-    write("how-we-review.html", page("how-we-review.html", f'How I review | {NAME}', "Independence rules, scoring and testing standards.", how_review(), nav="how"))
+    write("how-we-review.html", page("how-we-review.html", f'How we review | {NAME}', "Independence rules, scoring and testing standards.", how_review(), nav="how"))
     write("how-we-make-money.html", page("how-we-make-money.html", f'How the site is funded | {NAME}', "How this site is funded and the rules that keep reviews independent.", how_money(), nav="money"))
     write("corrections.html", page("corrections.html", f'Corrections | {NAME}', "Corrections policy and log.", corrections()))
-    write("suggest.html", page("suggest.html", f'Suggest a review | {NAME}', "Tell me what to review next.", suggest()))
+    write("suggest.html", page("suggest.html", f'Suggest a review | {NAME}', "Tell us what to review next.", suggest()))
     write("whats-next.html", page("whats-next.html", f'Reader reviews: the plan | {NAME}', "Principles for opening the site to reader reviews.", whats_next()))
     write("about.html", page("about.html", f'About | {NAME}', "About this site.", about()))
     write("404.html", page("404.html", f'Not found | {NAME}', "Page not found.", not_found(), noindex=True))
