@@ -3,115 +3,388 @@
     "name": "Unpaid Reviews",
     "domain": "unpaidreviews.com",
     "tagline": "Reviews nobody paid for.",
-    "description": "Independent reviews of products, travel and restaurants. Paid for by the reviewer: no affiliate links, no sponsorships, no gifts.",
+    "description": "Independent reviews of products, travel, restaurants and wine. Paid for by the reviewer: no affiliate links, no sponsorships, no gifts.",
     "contact": "hello@unpaidreviews.com",
     "policies_updated": "2026-11-24"
   },
   "categories": [
     {
-      "slug": "products", "name": "Products",
+      "slug": "products",
+      "name": "Products",
       "blurb": "Things bought at normal price and used long enough to know.",
-      "criteria": ["Performance", "Value", "Durability", "Ease of use"],
-      "method_label": "How I tested it", "kind": "Product"
+      "criteria": [
+        "Performance",
+        "Value",
+        "Durability",
+        "Ease of use"
+      ],
+      "method_label": "How I tested it",
+      "kind": "Product"
     },
     {
-      "slug": "travel", "name": "Travel",
+      "slug": "travel",
+      "name": "Travel",
       "blurb": "Places I paid to visit, with the real costs, crowds and logistics.",
-      "criteria": ["Experience", "Value", "Getting around", "Crowds and authenticity"],
-      "method_label": "How I visited", "kind": "Place"
+      "criteria": [
+        "Experience",
+        "Value",
+        "Getting around",
+        "Crowds and authenticity"
+      ],
+      "method_label": "How I visited",
+      "kind": "Place"
     },
     {
-      "slug": "restaurants", "name": "Restaurants",
+      "slug": "restaurants",
+      "name": "Restaurants",
       "blurb": "Meals I paid for, usually more than once, ordered like any customer.",
-      "criteria": ["Food", "Service", "Atmosphere", "Value"],
-      "method_label": "How I visited", "kind": "Restaurant"
+      "criteria": [
+        "Food",
+        "Service",
+        "Atmosphere",
+        "Value"
+      ],
+      "method_label": "How I visited",
+      "kind": "Restaurant"
+    },
+    {
+      "slug": "wine",
+      "name": "Wine",
+      "blurb": "Bottles I bought and drank, scored blind to price where I can and always with the cost disclosed.",
+      "criteria": [
+        "Aroma",
+        "Palate",
+        "Finish",
+        "Value"
+      ],
+      "method_label": "How I tasted it",
+      "kind": "Product"
     }
   ],
   "corrections": [],
   "reviews": [
     {
-      "id": "sample-product-a", "sample": true, "category": "products",
-      "title": "Sample Product Review: Example Kettle", "subject": "Example Kettle", "price": "$00 paid",
-      "date": "2026-11-01", "score": 7.5,
+      "id": "sample-product-a",
+      "sample": true,
+      "category": "products",
+      "title": "Sample Product Review: Example Kettle",
+      "subject": "Example Kettle",
+      "price": "$00 paid",
+      "date": "2026-11-01",
+      "score": 7.5,
       "verdict": "One-sentence bottom line goes here: who it is for, and who should skip it.",
       "who_for": "Say who gets the most out of this, in one or two sentences.",
       "method": "State how long you used it and how. Specifics beat adjectives.",
       "acquired": "Bought at full retail price with my own money.",
-      "worked": ["A strength you actually observed", "Another specific strength"],
-      "flaws": ["A weakness that will not stop most people buying it"],
-      "skip": ["Alternatives you tried and would not recommend, and why"],
-      "criteria": [["Performance", 8], ["Value", 7], ["Durability", 7], ["Ease of use", 8]],
-      "body": ["Longer write-up goes here. Compare it to alternatives you actually used.", "Say what changed your mind during testing."]
+      "worked": [
+        "A strength you actually observed",
+        "Another specific strength"
+      ],
+      "flaws": [
+        "A weakness that will not stop most people buying it"
+      ],
+      "skip": [
+        "Alternatives you tried and would not recommend, and why"
+      ],
+      "criteria": [
+        [
+          "Performance",
+          8
+        ],
+        [
+          "Value",
+          7
+        ],
+        [
+          "Durability",
+          7
+        ],
+        [
+          "Ease of use",
+          8
+        ]
+      ],
+      "body": [
+        "Longer write-up goes here. Compare it to alternatives you actually used.",
+        "Say what changed your mind during testing."
+      ]
     },
     {
-      "id": "sample-product-b", "sample": true, "category": "products",
-      "title": "Sample Product Review: Example Backpack", "subject": "Example Backpack", "price": "$00 paid",
-      "date": "2026-10-12", "score": 5.5,
+      "id": "sample-product-b",
+      "sample": true,
+      "category": "products",
+      "title": "Sample Product Review: Example Backpack",
+      "subject": "Example Backpack",
+      "price": "$00 paid",
+      "date": "2026-10-12",
+      "score": 5.5,
       "verdict": "A mixed result still needs a clear verdict: what to buy instead.",
       "who_for": "Describe the narrow group it works for.",
       "method": "Three weeks of daily commuting, including two rainy days.",
       "acquired": "Bought online at the normal listed price. No discount code.",
-      "worked": ["Comfortable straps"],
-      "flaws": ["Zipper snagged twice"],
-      "skip": ["The larger size: heavy even when empty"],
-      "criteria": [["Performance", 6], ["Value", 5], ["Durability", 5], ["Ease of use", 6]],
-      "body": ["Explain the zipper problem in detail, so readers can judge whether it matters to them."]
+      "worked": [
+        "Comfortable straps"
+      ],
+      "flaws": [
+        "Zipper snagged twice"
+      ],
+      "skip": [
+        "The larger size: heavy even when empty"
+      ],
+      "criteria": [
+        [
+          "Performance",
+          6
+        ],
+        [
+          "Value",
+          5
+        ],
+        [
+          "Durability",
+          5
+        ],
+        [
+          "Ease of use",
+          6
+        ]
+      ],
+      "body": [
+        "Explain the zipper problem in detail, so readers can judge whether it matters to them."
+      ]
     },
     {
-      "id": "sample-travel-a", "sample": true, "category": "travel",
-      "title": "Sample Travel Review: Example Coastal Town", "subject": "Example Coastal Town", "place": "Example Region", "price": "$000 per day, all-in",
-      "date": "2026-09-12", "score": 9.0,
+      "id": "sample-travel-a",
+      "sample": true,
+      "category": "travel",
+      "title": "Sample Travel Review: Example Coastal Town",
+      "subject": "Example Coastal Town",
+      "place": "Example Region",
+      "price": "$000 per day, all-in",
+      "date": "2026-09-12",
+      "score": 9.0,
       "verdict": "Say when to go, how long to stay, and what to skip.",
       "who_for": "Travelers who like walking and quiet evenings.",
       "method": "Four days in the shoulder season. Stayed in a mid-range hotel, used local transit.",
       "acquired": "Self-funded trip. No tourism-board hosting, press rates or free stays.",
-      "worked": ["What made the trip worth it"],
-      "flaws": ["Crowds, costs or logistics worth knowing before you book"],
-      "skip": ["The overpriced boat tour"],
-      "criteria": [["Experience", 9], ["Value", 8], ["Getting around", 7], ["Crowds and authenticity", 8]],
-      "body": ["Cover timing, cost and the practical details a visitor needs.", "Be honest about what disappointed you."]
+      "worked": [
+        "What made the trip worth it"
+      ],
+      "flaws": [
+        "Crowds, costs or logistics worth knowing before you book"
+      ],
+      "skip": [
+        "The overpriced boat tour"
+      ],
+      "criteria": [
+        [
+          "Experience",
+          9
+        ],
+        [
+          "Value",
+          8
+        ],
+        [
+          "Getting around",
+          7
+        ],
+        [
+          "Crowds and authenticity",
+          8
+        ]
+      ],
+      "body": [
+        "Cover timing, cost and the practical details a visitor needs.",
+        "Be honest about what disappointed you."
+      ]
     },
     {
-      "id": "sample-travel-b", "sample": true, "category": "travel",
-      "title": "Sample Travel Review: Example Mountain Resort", "subject": "Example Mountain Resort", "place": "Example Region", "price": "$000 per night",
-      "date": "2026-08-02", "score": 6.5,
+      "id": "sample-travel-b",
+      "sample": true,
+      "category": "travel",
+      "title": "Sample Travel Review: Example Mountain Resort",
+      "subject": "Example Mountain Resort",
+      "place": "Example Region",
+      "price": "$000 per night",
+      "date": "2026-08-02",
+      "score": 6.5,
       "verdict": "Beautiful setting, uneven value. Go midweek.",
       "who_for": "Hikers who do not need nightlife.",
       "method": "Three nights over a weekend, plus a revisit midweek the following month.",
       "acquired": "Paid the public rate. Booked directly under a regular name.",
-      "worked": ["Trails start at the door"],
-      "flaws": ["Weekend prices are high for what you get"],
-      "skip": ["The resort dining room"],
-      "criteria": [["Experience", 8], ["Value", 5], ["Getting around", 6], ["Crowds and authenticity", 7]],
-      "body": ["Compare weekend and midweek stays so readers can decide when to book."]
+      "worked": [
+        "Trails start at the door"
+      ],
+      "flaws": [
+        "Weekend prices are high for what you get"
+      ],
+      "skip": [
+        "The resort dining room"
+      ],
+      "criteria": [
+        [
+          "Experience",
+          8
+        ],
+        [
+          "Value",
+          5
+        ],
+        [
+          "Getting around",
+          6
+        ],
+        [
+          "Crowds and authenticity",
+          7
+        ]
+      ],
+      "body": [
+        "Compare weekend and midweek stays so readers can decide when to book."
+      ]
     },
     {
-      "id": "sample-restaurant-a", "sample": true, "category": "restaurants",
-      "title": "Sample Restaurant Review: Example Trattoria", "subject": "Example Trattoria", "place": "Example Neighborhood", "price": "$$",
-      "date": "2026-08-30", "score": 8.0,
+      "id": "sample-restaurant-a",
+      "sample": true,
+      "category": "restaurants",
+      "title": "Sample Restaurant Review: Example Trattoria",
+      "subject": "Example Trattoria",
+      "place": "Example Neighborhood",
+      "price": "$$",
+      "date": "2026-08-30",
+      "score": 8.0,
       "verdict": "What to order, what to avoid, and whether it is worth the price.",
       "who_for": "A relaxed dinner for two or a small group.",
       "method": "Visited twice: a Tuesday and a Saturday. Ordered full meals each time.",
       "acquired": "Paid the full bill both times. Reserved under a normal name and did not say I write reviews.",
-      "worked": ["Standout dish, named specifically"],
-      "flaws": ["Service pacing slowed on the busy night"],
-      "skip": ["The dessert menu"],
-      "criteria": [["Food", 9], ["Service", 7], ["Atmosphere", 8], ["Value", 7]],
-      "body": ["Describe dishes concretely: temperature, seasoning, portion and price.", "Note the date and day of each visit."]
+      "worked": [
+        "Standout dish, named specifically"
+      ],
+      "flaws": [
+        "Service pacing slowed on the busy night"
+      ],
+      "skip": [
+        "The dessert menu"
+      ],
+      "criteria": [
+        [
+          "Food",
+          9
+        ],
+        [
+          "Service",
+          7
+        ],
+        [
+          "Atmosphere",
+          8
+        ],
+        [
+          "Value",
+          7
+        ]
+      ],
+      "body": [
+        "Describe dishes concretely: temperature, seasoning, portion and price.",
+        "Note the date and day of each visit."
+      ]
     },
     {
-      "id": "sample-restaurant-b", "sample": true, "category": "restaurants",
-      "title": "Sample Restaurant Review: Example Noodle Bar", "subject": "Example Noodle Bar", "place": "Example Neighborhood", "price": "$",
-      "date": "2026-07-15", "score": 6.0,
+      "id": "sample-restaurant-b",
+      "sample": true,
+      "category": "restaurants",
+      "title": "Sample Restaurant Review: Example Noodle Bar",
+      "subject": "Example Noodle Bar",
+      "place": "Example Neighborhood",
+      "price": "$",
+      "date": "2026-07-15",
+      "score": 6.0,
       "verdict": "Fast and cheap. Good, not special.",
       "who_for": "A quick lunch.",
       "method": "Two weekday lunches.",
       "acquired": "Paid in full. Nobody there knew I was reviewing.",
-      "worked": ["Broth had real depth"],
-      "flaws": ["Seating is cramped"],
-      "skip": ["The fried sides"],
-      "criteria": [["Food", 7], ["Service", 6], ["Atmosphere", 5], ["Value", 7]],
-      "body": ["Short, plain reviews are fine for simple places. Keep the structure the same so readers can compare."]
+      "worked": [
+        "Broth had real depth"
+      ],
+      "flaws": [
+        "Seating is cramped"
+      ],
+      "skip": [
+        "The fried sides"
+      ],
+      "criteria": [
+        [
+          "Food",
+          7
+        ],
+        [
+          "Service",
+          6
+        ],
+        [
+          "Atmosphere",
+          5
+        ],
+        [
+          "Value",
+          7
+        ]
+      ],
+      "body": [
+        "Short, plain reviews are fine for simple places. Keep the structure the same so readers can compare."
+      ]
+    },
+    {
+      "id": "sample-wine-a",
+      "sample": true,
+      "category": "wine",
+      "title": "Sample Wine Review: Example Estate Red 2020",
+      "subject": "Example Estate Red",
+      "place": "Example Valley",
+      "price": "$32",
+      "date": "2026-11-20",
+      "score": 8.5,
+      "facts": [
+        "2020",
+        "Example Estate",
+        "Red blend"
+      ],
+      "verdict": "Whether the bottle is worth its price, and when to drink it.",
+      "who_for": "Weeknight dinners or a gift for someone who likes balanced reds.",
+      "method": "Opened over two evenings, decanted for 30 minutes the first night, served at cellar temperature.",
+      "acquired": "Bought at retail with my own money. No samples, no discounts for reviewers.",
+      "worked": [
+        "A specific aroma or flavor, named concretely"
+      ],
+      "flaws": [
+        "Short finish on the second night"
+      ],
+      "skip": [
+        "Drinking it straight from the fridge"
+      ],
+      "criteria": [
+        [
+          "Aroma",
+          9
+        ],
+        [
+          "Palate",
+          8
+        ],
+        [
+          "Finish",
+          8
+        ],
+        [
+          "Value",
+          9
+        ]
+      ],
+      "body": [
+        "Describe the wine concretely: color, aroma, texture and finish.",
+        "Say how long it was open, how it changed and when you would drink the next bottle."
+      ]
     }
   ]
 }

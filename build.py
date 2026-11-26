@@ -27,7 +27,8 @@ for r in REVIEWS:
     assert 0 <= r["score"] <= 10, f'{r["id"]}: score must be 0-10'
     datetime.strptime(r["date"], "%Y-%m-%d")
     names = [n for n, _ in r["criteria"]]
-    assert names == CAT[r["category"]]["criteria"], f'{r["id"]}: criteria must be {CAT[r["category"]]["criteria"]}'
+    assert not names or names == CAT[r["category"]]["criteria"], f'{r["id"]}: criteria must be {CAT[r["category"]]["criteria"]} (or left empty for a quick note)'
+    assert r.get("sample") or r.get("acquired", "").strip(), f'{r["id"]}: every real review needs a disclosure in "acquired"'
     for _, s in r["criteria"]:
         assert 0 <= s <= 10, f'{r["id"]}: criterion scores must be 0-10'
 
@@ -147,7 +148,7 @@ def home():
     latest = "\n  ".join(card(r) for r in sorted_reviews()[:6])
     return f"""<section class="hero">
   <h1>{e(SITE["tagline"])}</h1>
-  <p class="lead">Products, travel and restaurants, bought and visited with my own money, scored on published criteria, with every conflict of interest disclosed.</p>
+  <p class="lead">Products, travel, restaurants and wine, bought and visited with my own money, scored on published criteria, with every conflict of interest disclosed.</p>
   <form class="searchbar" action="reviews.html" method="get" role="search">
     <input type="search" name="q" placeholder="Search products, places, restaurants…" aria-label="Search reviews">
     <button class="btn" type="submit">Search</button>
@@ -216,7 +217,7 @@ def review_page(r):
     crit = "".join(
         f'<div class="crit"><span>{e(n)}</span><div class="bar"><i style="width:{s * 10}%"></i></div><b>{s}</b></div>'
         for n, s in r["criteria"])
-    facts = " · ".join(x for x in [r["subject"], r.get("place", ""), r.get("price", "")] if x)
+    facts = " · ".join(x for x in [r["subject"], *r.get("facts", []), r.get("place", ""), r.get("price", "")] if x)
     updated = f' · Updated {e(pretty(r["updated"]))}' if r.get("updated") else ""
     sample = ' <span class="badge">SAMPLE</span>' if r.get("sample") else ""
     skip = (f'<h2>What I would skip</h2><ul>{bullets(r["skip"])}</ul>') if r.get("skip") else ""
@@ -234,16 +235,10 @@ def review_page(r):
   <div class="facts">{e(facts)}</div>
   <p class="lede">{e(r["verdict"])}</p>
   <div class="disclosure"><b>Disclosure:</b> {e(r["acquired"])} <a href="../how-we-make-money.html">How the site is funded</a>.</div>
-  <h2>Who it's for</h2>
-  <p>{e(r["who_for"])}</p>
-  <h2>{e(c["method_label"])}</h2>
-  <p>{e(r["method"])}</p>
-  <h2>Scores</h2>
-  {crit}
-  <div class="two">
-    <div class="pro"><h3>What worked</h3><ul>{bullets(r["worked"])}</ul></div>
-    <div class="con"><h3>Flaws, but not dealbreakers</h3><ul>{bullets(r["flaws"])}</ul></div>
-  </div>
+  {("<h2>Who it's for</h2><p>" + e(r["who_for"]) + "</p>") if r.get("who_for") else ""}
+  {("<h2>" + e(c["method_label"]) + "</h2><p>" + e(r["method"]) + "</p>") if r.get("method") else ""}
+  {("<h2>Scores</h2>" + crit) if crit else ""}
+  {('<div class="two"><div class="pro"><h3>What worked</h3><ul>' + bullets(r["worked"]) + '</ul></div><div class="con"><h3>Flaws, but not dealbreakers</h3><ul>' + bullets(r["flaws"]) + '</ul></div></div>') if r["worked"] or r["flaws"] else ""}
   {skip}
   <div class="prose"><h2>The full story</h2>{"".join(f"<p>{e(p)}</p>" for p in r["body"])}</div>
   <p class="fine">Spotted a mistake? See the <a href="../corrections.html">corrections policy</a>. Read <a href="../how-we-review.html">how I review</a>.</p>
@@ -358,6 +353,19 @@ def whats_next():
     <li><b>Transparent moderation.</b> Published rules, and a regular report on what was removed and why.</li>
     <li><b>Reader and editor ratings stay separate.</b> My scores will never be blended into the community score.</li>
   </ul>
+  <h2>Lessons from wine communities</h2>
+  <p>Wine sites such as CellarTracker and Vivino have run large reader communities for years. Here is what I plan to borrow and what I plan to do differently.</p>
+  <ul>
+    <li><b>Notes tied to a real bottle.</b> A review says which vintage was opened, how it was stored and served, and how it was acquired. One bottle's flaw does not make another reader's review wrong.</li>
+    <li><b>Handles, not real names.</b> Readers choose a public handle. Real names stay private unless the reader chooses to show them.</li>
+    <li><b>Comments that notify.</b> When someone replies to a comment, the original commenter is told. Community members on existing sites say missing reply alerts are a common frustration.</li>
+    <li><b>Follow a taster, not a score.</b> Readers can follow people whose palates match theirs, as on CellarTracker and Vivino, instead of relying on one blended number.</li>
+    <li><b>No scores from too few voices.</b> A community average appears only after enough independent ratings, with the count always shown.</li>
+    <li><b>No republished professional scores.</b> Critics' points and notes are copyrighted, so they are not copied here.</li>
+    <li><b>Your own words only.</b> Notes written by AI or copied from elsewhere are not allowed.</li>
+    <li><b>Community kept apart from selling.</b> There are no shop links and no affiliate links, so nothing on the site pushes readers toward buying.</li>
+    <li><b>Cellar tools stay elsewhere.</b> Inventory, bin locations and drinking windows are better handled by CellarTracker, so this site covers published reviews only.</li>
+  </ul>
   <p>Want to be told when it opens? Email <b>{e(SITE["contact"])}</b>.</p>
 </article>"""
 
@@ -365,7 +373,7 @@ def about():
     return f"""<article class="page">
   <h1>About</h1>
   <p class="samplebar">Placeholder. Replace this with a short note about why you started the site and what you review. Share only what you are comfortable making public.</p>
-  <p>{e(SITE["name"])} publishes independent reviews of products, travel and restaurants. Every review is paid for by the reviewer, and no revenue is tied to what gets reviewed. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
+  <p>{e(SITE["name"])} publishes independent reviews of products, travel, restaurants and wine. Every review is paid for by the reviewer, and no revenue is tied to what gets reviewed. See <a href="how-we-review.html">how I review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
 </article>"""
 
 def not_found():

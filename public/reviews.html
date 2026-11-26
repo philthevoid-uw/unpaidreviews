@@ -22,14 +22,14 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
   <a class="brand" href="index.html">Unpaid <span>Reviews</span></a>
-  <nav aria-label="Main"><a href="reviews.html" aria-current="page">All reviews</a><a href="products.html">Products</a><a href="travel.html">Travel</a><a href="restaurants.html">Restaurants</a><a href="how-we-review.html">How I review</a><a href="how-we-make-money.html">Funding</a></nav>
+  <nav aria-label="Main"><a href="reviews.html" aria-current="page">All reviews</a><a href="products.html">Products</a><a href="travel.html">Travel</a><a href="restaurants.html">Restaurants</a><a href="wine.html">Wine</a><a href="how-we-review.html">How I review</a><a href="how-we-make-money.html">Funding</a></nav>
 </div></header>
 <main id="main" class="wrap">
 <section class="hero" style="padding-bottom:6px">
   <h1 style="font-size:clamp(1.8rem,4.5vw,2.6rem)">All reviews</h1>
   <p class="lead">Every review follows the same format and the same disclosure rules.</p>
 </section>
-<div class="toolbar"><button class="chip" data-cat="all" aria-pressed="true">All</button><button class="chip" data-cat="products" aria-pressed="false">Products</button><button class="chip" data-cat="travel" aria-pressed="false">Travel</button><button class="chip" data-cat="restaurants" aria-pressed="false">Restaurants</button></div>
+<div class="toolbar"><button class="chip" data-cat="all" aria-pressed="true">All</button><button class="chip" data-cat="products" aria-pressed="false">Products</button><button class="chip" data-cat="travel" aria-pressed="false">Travel</button><button class="chip" data-cat="restaurants" aria-pressed="false">Restaurants</button><button class="chip" data-cat="wine" aria-pressed="false">Wine</button></div>
 <div class="toolbar" style="margin-top:0">
   <input type="search" id="q" placeholder="Search reviews…" aria-label="Search reviews">
   <select id="sort" aria-label="Sort reviews">
@@ -39,6 +39,13 @@
 </div>
 <div class="samplebar">Entries marked <b>SAMPLE</b> are layouts with no real findings. Replace them with real reviews in <code>data/reviews.json</code>. Sample pages are hidden from search engines.</div>
 <div class="grid" id="grid">
+  <a class="card c-wine" href="reviews/sample-wine-a.html" data-category="wine" data-score="8.5" data-date="2026-11-20" data-text="sample wine review: example estate red 2020 example estate red example valley whether the bottle is worth its price, and when to drink it.">
+    <div class="meta"><span>Wine</span><span class="badge">SAMPLE</span></div>
+    <h3>Sample Wine Review: Example Estate Red 2020</h3>
+    <div class="sub">Example Estate Red · Example Valley · November 20, 2026</div>
+    <div class="row"><div class="ring" style="--p:85" role="img" aria-label="Score 8.5 out of 10"><b>8.5</b></div>
+    <div class="verdict">Whether the bottle is worth its price, and when to drink it.</div></div>
+  </a>
   <a class="card c-products" href="reviews/sample-product-a.html" data-category="products" data-score="7.5" data-date="2026-11-01" data-text="sample product review: example kettle example kettle  one-sentence bottom line goes here: who it is for, and who should skip it.">
     <div class="meta"><span>Products</span><span class="badge">SAMPLE</span></div>
     <h3>Sample Product Review: Example Kettle</h3>

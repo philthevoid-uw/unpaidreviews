@@ -24,3 +24,9 @@ Any static host works (Netlify, Cloudflare Pages, GitHub Pages). Upload this fol
 - `build.py`: generates the HTML pages (needs only Python 3)
 - `css/style.css`, `js/app.js`: styling, and search/filter/sort
 - Generated (do not hand-edit, they are overwritten): all `.html` pages, `reviews/*.html`, `sitemap.xml`, `feed.xml`, `robots.txt`
+
+## Importing wine notes from CellarTracker
+1. On the CellarTracker website (desktop), open the view with your tasting notes and click Export, choosing CSV. Save the file into the `imports` folder (it is never uploaded to GitHub).
+2. Run `python3 tools/import_cellartracker.py imports/yourfile.csv`. It writes private drafts to `imports/drafts.json` and ignores inventory, locations, quantities, prices and private notes.
+3. Choose the drafts to publish, copy them into `data/reviews.json`, and fill in `acquired` (how the bottle was obtained). The build refuses real reviews without it.
+4. Run `python3 build.py`, then push.
