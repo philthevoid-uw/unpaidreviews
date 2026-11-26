@@ -23,7 +23,7 @@ FIELDS = {
     "type":     ["type", "color", "category"],
     "score":    ["rating", "score", "points", "myscore"],
     "note":     ["tastingnote", "note", "notes", "comment", "tastingnotes"],
-    "date":     ["tastedate", "tasteddate", "date", "tasted", "consumed"],
+    "date":     ["tastingdate", "tastedate", "tasteddate", "date", "tasted", "consumed"],
 }
 
 def norm(h): return re.sub(r"[^a-z]", "", h.lower())
@@ -71,7 +71,7 @@ def main(path):
                              (r.get(m["grape"]) or "").strip() if m["grape"] else ""] if x]
         place = ", ".join(x for x in [(r.get(m["region"]) or "").strip() if m["region"] else "",
                                        (r.get(m["country"]) or "").strip() if m["country"] else ""] if x)
-        first = re.split(r"(?<=[.!?])\s", note, 1)[0]
+        first = re.split(r"(?<=[.!?])\s", note, maxsplit=1)[0]
         out.append({"id": rid, "category": "wine", "title": title, "subject": name, "facts": facts, "place": place,
                     "date": to_date(r.get(m["date"], "")) if m["date"] else to_date(""), "score": score,
                     "verdict": first[:220], "who_for": "", "method": "", "acquired": "",
