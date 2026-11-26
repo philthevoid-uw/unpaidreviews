@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Products reviews | Unpaid Reviews</title>
+<meta name="description" content="Things bought at normal price and used long enough to know.">
+<link rel="canonical" href="https://unpaidreviews.com/products.html">
+<meta property="og:site_name" content="Unpaid Reviews">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Products reviews | Unpaid Reviews">
+<meta property="og:description" content="Things bought at normal price and used long enough to know.">
+<meta property="og:url" content="https://unpaidreviews.com/products.html">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/atom+xml" title="Unpaid Reviews" href="feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+  <a class="brand" href="index.html">Unpaid <span>Reviews</span></a>
+  <nav aria-label="Main"><a href="reviews.html">All reviews</a><a href="products.html" aria-current="page">Products</a><a href="travel.html">Travel</a><a href="restaurants.html">Restaurants</a><a href="how-we-review.html">How I review</a><a href="how-we-make-money.html">Funding</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<section class="hero c-products" style="padding-bottom:6px">
+  <div class="kicker" style="margin:0">Category</div>
+  <h1 style="font-size:clamp(1.8rem,4.5vw,2.6rem)">Products</h1>
+  <p class="lead">Things bought at normal price and used long enough to know.</p>
+  <p class="facts">Every review in this category is scored on: <b>Performance, Value, Durability, Ease of use</b>. <a href="how-we-review.html">How scoring works</a>.</p>
+</section>
+<div class="toolbar"></div>
+<div class="toolbar" style="margin-top:0">
+  <input type="search" id="q" placeholder="Search reviews…" aria-label="Search reviews">
+  <select id="sort" aria-label="Sort reviews">
+    <option value="new">Newest</option><option value="high">Highest score</option><option value="low">Lowest score</option>
+  </select>
+  <span id="count" aria-live="polite" style="color:var(--muted);font-size:.9rem"></span>
+</div>
+<div class="samplebar">Entries marked <b>SAMPLE</b> are layouts with no real findings. Replace them with real reviews in <code>data/reviews.json</code>. Sample pages are hidden from search engines.</div>
+<div class="grid" id="grid">
+  <a class="card c-products" href="reviews/sample-product-a.html" data-category="products" data-score="7.5" data-date="2026-11-01" data-text="sample product review: example kettle example kettle  one-sentence bottom line goes here: who it is for, and who should skip it.">
+    <div class="meta"><span>Products</span><span class="badge">SAMPLE</span></div>
+    <h3>Sample Product Review: Example Kettle</h3>
+    <div class="sub">Example Kettle · November 1, 2026</div>
+    <div class="row"><div class="ring" style="--p:75" role="img" aria-label="Score 7.5 out of 10"><b>7.5</b></div>
+    <div class="verdict">One-sentence bottom line goes here: who it is for, and who should skip it.</div></div>
+  </a>
+  <a class="card c-products" href="reviews/sample-product-b.html" data-category="products" data-score="5.5" data-date="2026-10-12" data-text="sample product review: example backpack example backpack  a mixed result still needs a clear verdict: what to buy instead.">
+    <div class="meta"><span>Products</span><span class="badge">SAMPLE</span></div>
+    <h3>Sample Product Review: Example Backpack</h3>
+    <div class="sub">Example Backpack · October 12, 2026</div>
+    <div class="row"><div class="ring" style="--p:55" role="img" aria-label="Score 5.5 out of 10"><b>5.5</b></div>
+    <div class="verdict">A mixed result still needs a clear verdict: what to buy instead.</div></div>
+  </a>
+</div>
+<div class="empty" id="empty" hidden>No reviews match your search.</div>
+</main>
+<footer><div class="wrap"><div class="cols">
+  <div><b>Unpaid Reviews</b><br>Independent. Paid for by the reviewer: no affiliate links, no sponsorships, no gifts, no payment that could influence a review.</div>
+  <div><h4>Read</h4><ul>
+    <li><a href="how-we-review.html">How I review</a></li>
+    <li><a href="how-we-make-money.html">How the site is funded</a></li>
+    <li><a href="corrections.html">Corrections</a></li>
+    <li><a href="feed.xml">RSS feed</a></li></ul></div>
+  <div><h4>Get involved</h4><ul>
+    <li><a href="suggest.html">Suggest the next review</a></li>
+    <li><a href="whats-next.html">Reader reviews: the plan</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="mailto:hello@unpaidreviews.com">hello@unpaidreviews.com</a></li></ul></div>
+</div></div></footer>
+<script src="js/app.js"></script>
+</body>
+</html>
