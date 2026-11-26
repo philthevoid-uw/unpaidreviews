@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cellarcommunity.com/sitemap.xml

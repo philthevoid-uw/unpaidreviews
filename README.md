@@ -9,6 +9,19 @@ A plain static website. No database, no framework, no server software.
 4. The four `"criteria"` names must match the category's list at the top of the file, or the build stops and tells you why.
 5. Run `python3 build.py   # writes the site into the public folder` to regenerate every page, then upload the folder.
 
+## Domains and categories
+Everything is controlled from `data/reviews.json`; there is no other config to touch.
+
+- **New category:** add an entry to `"categories"` (slug, name, blurb, four criteria). It appears on the main site automatically.
+- **Give a category its own domain:** add to `"domains"`:
+  `{"host": "cellarcommunity.com", "mode": "category", "category": "wine", "name": "Cellar Community", "tagline": "..."}`
+  The domain becomes its own small site (home, reviews, sitemap, feed) and the main site sends that category's pages there with a 301.
+  Remove the entry and the category goes back to the main site.
+- **Point an extra domain at the main site:** `{"host": "ireviewtravel.com", "mode": "redirect", "target": "/travel.html"}`.
+  Change `"mode"` to `"category"` later to turn it into a full site.
+- After editing, run `python3 build.py` and push. It rewrites `public/` and `src/routes.json`, which `src/worker.js` reads. Deploys run `npx wrangler deploy` (see `wrangler.jsonc`).
+- **One-time per new domain in Cloudflare:** add the domain as a site (Free), change its nameservers at the registrar, then in Workers & Pages, `unpaidreviews`, Settings, Domains & Routes, add the domain and its `www`. Policy pages (how I review, funding, corrections) live only on unpaidreviews.com; the other domains link to them.
+
 ## Before you launch
 - Delete the six SAMPLE reviews.
 - Check the contact address (`site.contact` in `data/reviews.json`) is a real, working mailbox.
@@ -22,6 +35,7 @@ Any static host works (Netlify, Cloudflare Pages, GitHub Pages). Upload this fol
 ## Files
 - `data/reviews.json`: site name, tagline, contact, categories, corrections, all reviews
 - `build.py`: generates the HTML pages (needs only Python 3)
+- `src/worker.js`, `wrangler.jsonc`: routes each domain to its pages; `src/routes.json` is generated
 - `css/style.css`, `js/app.js`: styling, and search/filter/sort
 - Generated (do not hand-edit, they are overwritten): all `.html` pages, `reviews/*.html`, `sitemap.xml`, `feed.xml`, `robots.txt`
 

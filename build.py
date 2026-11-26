@@ -4,9 +4,13 @@
 Run:  python3 build.py
 Writes: index.html, reviews.html, <category>.html, policy pages, reviews/<id>.html,
         404.html, sitemap.xml, robots.txt, feed.xml
+        _sites/<domain>/...  one mini-site per category-mode domain (see "domains" in the data file)
+        src/routes.json      host routing table read by src/worker.js
 Needs only Python 3.
 """
 import json
+import re
+import shutil
 from datetime import datetime
 from html import escape as e
 from pathlib import Path
@@ -15,8 +19,38 @@ ROOT = Path(__file__).parent
 PUBLIC = ROOT / "public"
 data = json.loads((ROOT / "data" / "reviews.json").read_text())
 SITE, CATS, REVIEWS, CORRECTIONS = data["site"], data["categories"], data["reviews"], data["corrections"]
-BASE = f'https://{SITE["domain"]}'
+MAIN = SITE["domain"]
+DOMAINS = data.get("domains", [])
+ALL_CATS, ALL_REVIEWS = list(CATS), list(REVIEWS)
 CAT = {c["slug"]: c for c in CATS}
+BASE = f"https://{MAIN}"
+HOST = MAIN            # the domain currently being built
+NAME = SITE["name"]    # brand name of the site currently being built
+
+# ---------- domains: where each category lives ----------
+# mode "category": the domain is its own site for one category; the main site sends that category there.
+# mode "redirect": the domain is a plain 301 to a page on the main site.
+_hosts = set()
+for d in DOMAINS:
+    assert d["host"] != MAIN and d["host"] not in _hosts, f'domain {d["host"]}: duplicate or same as main'
+    _hosts.add(d["host"])
+    assert d.get("mode") in ("category", "redirect"), f'domain {d["host"]}: mode must be "category" or "redirect"'
+    if d["mode"] == "category":
+        assert d.get("category") in CAT, f'domain {d["host"]}: unknown category {d.get("category")}'
+        assert d.get("name"), f'domain {d["host"]}: category domains need a "name"'
+    else:
+        assert d.get("target", "").startswith(("/", "https://")), f'domain {d["host"]}: redirect needs a "target"'
+CAT_DOMAIN = {d["category"]: d for d in DOMAINS if d["mode"] == "category"}
+assert len(CAT_DOMAIN) == sum(d["mode"] == "category" for d in DOMAINS), "a category can live on only one domain"
+
+def host_of(r):
+    return CAT_DOMAIN[r["category"]]["host"] if r["category"] in CAT_DOMAIN else MAIN
+
+def review_url(r):
+    return f'https://{host_of(r)}/reviews/{r["id"]}.html'
+
+def review_href(r, root):
+    return f'{root}reviews/{r["id"]}.html' if host_of(r) == HOST else review_url(r)
 
 # ---------- validation: fail loudly rather than publish something broken ----------
 seen = set()
@@ -41,9 +75,21 @@ def real(r):
 def sorted_reviews(items=None):
     return sorted(items if items is not None else REVIEWS, key=lambda r: r["date"], reverse=True)
 
-NAV = [("reviews.html", "All reviews", "reviews")] + \
-      [(f'{c["slug"]}.html', c["name"], c["slug"]) for c in CATS] + \
-      [("how-we-review.html", "How I review", "how"), ("how-we-make-money.html", "Funding", "money")]
+def main_nav():
+    return [("reviews.html", "All reviews", "reviews")] + \
+           [((f'https://{CAT_DOMAIN[c["slug"]]["host"]}/' if c["slug"] in CAT_DOMAIN else f'{c["slug"]}.html'), c["name"], c["slug"]) for c in ALL_CATS] + \
+           [("how-we-review.html", "How I review", "how"), ("how-we-make-money.html", "Funding", "money")]
+
+def category_nav(d):
+    return [("index.html", "All reviews", "home"), ("how-we-review.html", "How I review", "how"),
+            ("how-we-make-money.html", "Funding", "money"), (f"https://{MAIN}/", f"{SITE['name']} ↗", "parent")]
+
+NAV = main_nav()
+POLICY = re.compile(r'href="(?:\.\./)*(how-we-review|how-we-make-money|corrections|suggest|whats-next|about)\.html')
+
+def brand_html():
+    first, _, rest = NAME.partition(" ")
+    return f'{e(first)} <span>{e(rest)}</span>' if rest else e(first)
 
 def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="website"):
     depth = path.count("/")
@@ -53,10 +99,10 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
     if jsonld:
         ld = '<script type="application/ld+json">' + json.dumps(jsonld).replace("</", "<\\/") + "</script>\n"
     links = "".join(
-        f'<a href="{root}{href}"' + (' aria-current="page"' if nav == key else "") + f">{e(label)}</a>"
+        f'<a href="{href if href.startswith("http") else root + href}"' + (' aria-current="page"' if nav == key else "") + f">{e(label)}</a>"
         for href, label, key in NAV)
     canon = f"{BASE}/{'' if path == 'index.html' else path}"
-    return f"""<!DOCTYPE html>
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -64,13 +110,13 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 {robots}<link rel="canonical" href="{canon}">
-<meta property="og:site_name" content="{e(SITE["name"])}">
+<meta property="og:site_name" content="{e(NAME)}">
 <meta property="og:type" content="{og_type}">
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{canon}">
 <meta name="twitter:card" content="summary">
-<link rel="alternate" type="application/atom+xml" title="{e(SITE["name"])}" href="{root}feed.xml">
+<link rel="alternate" type="application/atom+xml" title="{e(NAME)}" href="{root}feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -79,14 +125,14 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
-  <a class="brand" href="{root}index.html">Unpaid <span>Reviews</span></a>
+  <a class="brand" href="{root}index.html">{brand_html()}</a>
   <nav aria-label="Main">{links}</nav>
 </div></header>
 <main id="main" class="wrap">
 {body}
 </main>
 <footer><div class="wrap"><div class="cols">
-  <div><b>{e(SITE["name"])}</b><br>Independent. No one pays this site or its owners based on purchases of what is reviewed, and no revenue incentive decides what is reviewed or how it is scored.</div>
+  <div><b>{e(NAME)}</b><br>Independent. No one pays this site or its owners based on purchases of what is reviewed, and no revenue incentive decides what is reviewed or how it is scored.</div>
   <div><h4>Read</h4><ul>
     <li><a href="{root}how-we-review.html">How I review</a></li>
     <li><a href="{root}how-we-make-money.html">How the site is funded</a></li>
@@ -102,6 +148,9 @@ def page(path, title, desc, body, nav="", noindex=False, jsonld=None, og_type="w
 </body>
 </html>
 """
+    if HOST != MAIN:  # policy pages live once, on the main site
+        html = POLICY.sub(lambda m: f'href="https://{MAIN}/{m.group(1)}.html', html)
+    return html
 
 # ---------- components ----------
 def card(r, root=""):
@@ -109,7 +158,7 @@ def card(r, root=""):
     text = f'{r["title"]} {r["subject"]} {r.get("place", "")} {r["verdict"]}'.lower()
     sample = '<span class="badge">SAMPLE</span>' if r.get("sample") else ""
     sub = " · ".join(x for x in [r["subject"], r.get("place", "")] if x)
-    return f"""<a class="card c-{e(r["category"])}" href="{root}reviews/{e(r["id"])}.html" data-category="{e(r["category"])}" data-score="{r["score"]}" data-date="{e(r["date"])}" data-text="{e(text)}">
+    return f"""<a class="card c-{e(r["category"])}" href="{review_href(r, root)}" data-category="{e(r["category"])}" data-score="{r["score"]}" data-date="{e(r["date"])}" data-text="{e(text)}">
     <div class="meta"><span>{e(c["name"])}</span>{sample}</div>
     <h3>{e(r["title"])}</h3>
     <div class="sub">{e(sub)} · {e(pretty(r["date"]))}</div>
@@ -227,7 +276,7 @@ def review_page(r):
     if related:
         rel = '<h2>More in ' + e(c["name"]) + '</h2><div class="grid">' + "".join(card(x, "../") for x in related) + "</div>"
     body = f"""<article class="review c-{e(r["category"])}">
-  <a class="back" href="../{e(r["category"])}.html">← {e(c["name"])}</a>
+  <a class="back" href="../{"index.html" if HOST != MAIN else e(r["category"]) + ".html"}">← {e(c["name"]) if HOST == MAIN else "All reviews"}</a>
   <div class="kicker">{e(c["name"])} · {e(pretty(r["date"]))}{updated}{sample}</div>
   <div class="head">
     <div class="ring big" style="--p:{r["score"] * 10:.0f}" role="img" aria-label="Score {r["score"]:.1f} out of 10"><b>{r["score"]:.1f}</b></div>
@@ -252,7 +301,7 @@ def review_page(r):
               "reviewRating": {"@type": "Rating", "ratingValue": r["score"], "bestRating": 10, "worstRating": 0},
               "author": {"@type": "Organization", "name": SITE["name"]},
               "datePublished": r["date"], "reviewBody": r["verdict"]}
-    return page(f'reviews/{r["id"]}.html', f'{r["title"]} | {SITE["name"]}', r["verdict"], body,
+    return page(f'reviews/{r["id"]}.html', f'{r["title"]} | {NAME}', r["verdict"], body,
                 nav=r["category"], noindex=not real(r), jsonld=ld, og_type="article")
 
 def how_review():
@@ -389,47 +438,110 @@ def about():
 def not_found():
     return """<article class="page"><h1>Page not found</h1><p>That page does not exist. Try the <a href="index.html">home page</a> or <a href="reviews.html">all reviews</a>.</p></article>"""
 
+OUT = PUBLIC
+
 def write(path, text):
-    p = PUBLIC / path
+    p = OUT / path
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(text)
+
+def category_home(d):
+    c = CAT[d["category"]]
+    crit = ", ".join(c["criteria"])
+    tag = d.get("tagline") or c["blurb"]
+    return f"""<section class="hero c-{e(c["slug"])}" style="padding-bottom:6px">
+  <h1 style="font-size:clamp(1.8rem,4.5vw,2.6rem)">{e(tag)}</h1>
+  <p class="lead">{e(c["blurb"])}</p>
+  <p class="facts">Every review here is scored on: <b>{e(crit)}</b>. {e(d["name"])} is part of <a href="https://{MAIN}/">{e(SITE["name"])}</a> and follows the same <a href="how-we-review.html">independence rules</a>.</p>
+</section>
+{controls(False)}
+{sample_note()}
+<div class="grid" id="grid">
+  {"".join(card(r) for r in sorted_reviews())}
+</div>
+<div class="empty" id="empty" hidden>No reviews match your search.</div>"""
+
+def build_feed_and_sitemap(static, reviews):
+    real_reviews = sorted_reviews([r for r in reviews if real(r)])
+    urls = [f"{BASE}/" if p == "index.html" else f"{BASE}/{p}" for p in static] + \
+           [review_url(r) for r in real_reviews if host_of(r) == HOST]  # a sitemap may only list its own host
+    write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+          "".join(f"  <url><loc>{u}</loc></url>\n" for u in urls) + "</urlset>\n")
+    write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n")
+    updated = (real_reviews[0]["date"] if real_reviews else SITE["policies_updated"]) + "T00:00:00Z"
+    entries = "".join(
+        f'  <entry><title>{e(r["title"])}</title><link href="{review_url(r)}"/>'
+        f'<id>{review_url(r)}</id><updated>{r["date"]}T00:00:00Z</updated>'
+        f'<summary>{e(r["verdict"])}</summary></entry>\n' for r in real_reviews)
+    write("feed.xml", f'<?xml version="1.0" encoding="UTF-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom">\n'
+          f'  <title>{e(NAME)}</title><link href="{BASE}/"/><id>{BASE}/</id><updated>{updated}</updated>\n{entries}</feed>\n')
+    return real_reviews
+
+def build_main():
+    global HOST, NAME, BASE, NAV, OUT, CATS, REVIEWS
+    HOST, NAME, BASE, NAV, OUT = MAIN, SITE["name"], f"https://{MAIN}", main_nav(), PUBLIC
+    CATS, REVIEWS = ALL_CATS, ALL_REVIEWS
+    site_ld = {"@context": "https://schema.org", "@type": "WebSite", "name": NAME, "url": BASE + "/",
+               "potentialAction": {"@type": "SearchAction", "target": BASE + "/reviews.html?q={search_term_string}",
+                                   "query-input": "required name=search_term_string"}}
+    write("index.html", page("index.html", f'{NAME}: {SITE["tagline"]}', SITE["description"], home(), nav="home", jsonld=site_ld))
+    write("reviews.html", page("reviews.html", f'All reviews | {NAME}', "Every review, searchable by category.", reviews_index(), nav="reviews"))
+    for c in ALL_CATS:
+        if c["slug"] in CAT_DOMAIN:
+            continue  # lives on its own domain; src/worker.js redirects the old path
+        write(f'{c["slug"]}.html', page(f'{c["slug"]}.html', f'{c["name"]} reviews | {NAME}', c["blurb"], category_page(c), nav=c["slug"]))
+    write("how-we-review.html", page("how-we-review.html", f'How I review | {NAME}', "Independence rules, scoring and testing standards.", how_review(), nav="how"))
+    write("how-we-make-money.html", page("how-we-make-money.html", f'How the site is funded | {NAME}', "How this site is funded and the rules that keep reviews independent.", how_money(), nav="money"))
+    write("corrections.html", page("corrections.html", f'Corrections | {NAME}', "Corrections policy and log.", corrections()))
+    write("suggest.html", page("suggest.html", f'Suggest a review | {NAME}', "Tell me what to review next.", suggest()))
+    write("whats-next.html", page("whats-next.html", f'Reader reviews: the plan | {NAME}', "Principles for opening the site to reader reviews.", whats_next()))
+    write("about.html", page("about.html", f'About | {NAME}', "About this site.", about()))
+    write("404.html", page("404.html", f'Not found | {NAME}', "Page not found.", not_found(), noindex=True))
+    kept = [r for r in ALL_REVIEWS if host_of(r) == MAIN]
+    for r in kept:
+        write(f'reviews/{r["id"]}.html', review_page(r))
+    static = ["index.html", "reviews.html", "how-we-review.html", "how-we-make-money.html", "corrections.html",
+              "suggest.html", "whats-next.html", "about.html"] + [f'{c["slug"]}.html' for c in ALL_CATS if c["slug"] not in CAT_DOMAIN]
+    real_reviews = build_feed_and_sitemap(static, ALL_REVIEWS)
+    return len(kept), len(real_reviews), len(static) + 1
+
+def build_category_site(d):
+    global HOST, NAME, BASE, NAV, OUT, CATS, REVIEWS
+    HOST, NAME, BASE, NAV = d["host"], d["name"], f'https://{d["host"]}', category_nav(d)
+    OUT = PUBLIC / "_sites" / d["host"]
+    CATS = [CAT[d["category"]]]
+    REVIEWS = [r for r in ALL_REVIEWS if r["category"] == d["category"]]
+    write("index.html", page("index.html", f'{NAME}: {d.get("tagline") or CAT[d["category"]]["blurb"]}', CAT[d["category"]]["blurb"], category_home(d), nav="home"))
+    write("404.html", page("404.html", f'Not found | {NAME}', "Page not found.", not_found(), noindex=True))
+    for r in REVIEWS:
+        write(f'reviews/{r["id"]}.html', review_page(r))
+    build_feed_and_sitemap(["index.html"], REVIEWS)
+    return len(REVIEWS)
 
 # ---------- build ----------
 for old in (PUBLIC / "reviews").glob("*.html"):
     old.unlink()
+shutil.rmtree(PUBLIC / "_sites", ignore_errors=True)
+for slug in CAT_DOMAIN:  # stale page from before the category moved
+    (PUBLIC / f"{slug}.html").unlink(missing_ok=True)
 
-site_ld = {"@context": "https://schema.org", "@type": "WebSite", "name": SITE["name"], "url": BASE + "/",
-           "potentialAction": {"@type": "SearchAction", "target": BASE + "/reviews.html?q={search_term_string}",
-                               "query-input": "required name=search_term_string"}}
-write("index.html", page("index.html", f'{SITE["name"]}: {SITE["tagline"]}', SITE["description"], home(), nav="home", jsonld=site_ld))
-write("reviews.html", page("reviews.html", f'All reviews | {SITE["name"]}', "Every review, searchable by category.", reviews_index(), nav="reviews"))
-for c in CATS:
-    write(f'{c["slug"]}.html', page(f'{c["slug"]}.html', f'{c["name"]} reviews | {SITE["name"]}', c["blurb"], category_page(c), nav=c["slug"]))
-write("how-we-review.html", page("how-we-review.html", f'How I review | {SITE["name"]}', "Independence rules, scoring and testing standards.", how_review(), nav="how"))
-write("how-we-make-money.html", page("how-we-make-money.html", f'How the site is funded | {SITE["name"]}', "How this site is funded and the rules that keep reviews independent.", how_money(), nav="money"))
-write("corrections.html", page("corrections.html", f'Corrections | {SITE["name"]}', "Corrections policy and log.", corrections()))
-write("suggest.html", page("suggest.html", f'Suggest a review | {SITE["name"]}', "Tell me what to review next.", suggest()))
-write("whats-next.html", page("whats-next.html", f'Reader reviews: the plan | {SITE["name"]}', "Principles for opening the site to reader reviews.", whats_next()))
-write("about.html", page("about.html", f'About | {SITE["name"]}', "About this site.", about()))
-write("404.html", page("404.html", f'Not found | {SITE["name"]}', "Page not found.", not_found(), noindex=True))
-for r in REVIEWS:
-    write(f'reviews/{r["id"]}.html', review_page(r))
+n_kept, n_real, n_pages = build_main()
+for d in DOMAINS:
+    if d["mode"] == "category":
+        n = build_category_site(d)
+        print(f'  {d["host"]}: {n} {d["category"]} reviews')
 
-# sitemap, robots, feed
-static = ["index.html", "reviews.html", "how-we-review.html", "how-we-make-money.html", "corrections.html",
-          "suggest.html", "whats-next.html", "about.html"] + [f'{c["slug"]}.html' for c in CATS]
-urls = [f"{BASE}/" if p == "index.html" else f"{BASE}/{p}" for p in static]
-urls += [f'{BASE}/reviews/{r["id"]}.html' for r in REVIEWS if real(r)]
-write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-      "".join(f"  <url><loc>{u}</loc></url>\n" for u in urls) + "</urlset>\n")
-write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n")
-real_reviews = sorted_reviews([r for r in REVIEWS if real(r)])
-updated = (real_reviews[0]["date"] if real_reviews else SITE["policies_updated"]) + "T00:00:00Z"
-entries = "".join(
-    f'  <entry><title>{e(r["title"])}</title><link href="{BASE}/reviews/{r["id"]}.html"/>'
-    f'<id>{BASE}/reviews/{r["id"]}.html</id><updated>{r["date"]}T00:00:00Z</updated>'
-    f'<summary>{e(r["verdict"])}</summary></entry>\n' for r in real_reviews)
-write("feed.xml", f'<?xml version="1.0" encoding="UTF-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom">\n'
-      f'  <title>{e(SITE["name"])}</title><link href="{BASE}/"/><id>{BASE}/</id><updated>{updated}</updated>\n{entries}</feed>\n')
+# routing table for src/worker.js: which host serves what, and where moved paths go
+routes = {
+    "main": MAIN,
+    "sites": {d["host"]: {"category": d["category"]} for d in DOMAINS if d["mode"] == "category"},
+    "moved": [{"host": d["host"], "paths": [f'/{d["category"]}.html'],
+               "review_ids": [r["id"] for r in ALL_REVIEWS if r["category"] == d["category"]]}
+              for d in DOMAINS if d["mode"] == "category"],
+    "redirects": {d["host"]: (d["target"] if d["target"].startswith("https://") else f'https://{MAIN}{d["target"]}')
+                  for d in DOMAINS if d["mode"] == "redirect"},
+}
+(ROOT / "src").mkdir(exist_ok=True)
+(ROOT / "src" / "routes.json").write_text(json.dumps(routes, indent=2) + "\n")
 
-print(f"Built {len(REVIEWS)} reviews ({len(real_reviews)} real, {len(REVIEWS) - len(real_reviews)} sample) and {len(static) + 1} other pages.")
+print(f"Built {len(ALL_REVIEWS)} reviews ({n_real} real, {len(ALL_REVIEWS) - n_real} sample) and {n_pages} other pages.")

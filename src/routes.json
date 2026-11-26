@@ -1,0 +1,27 @@
+{
+  "main": "unpaidreviews.com",
+  "sites": {
+    "cellarcommunity.com": {
+      "category": "wine"
+    }
+  },
+  "moved": [
+    {
+      "host": "cellarcommunity.com",
+      "paths": [
+        "/wine.html"
+      ],
+      "review_ids": [
+        "sample-wine-a",
+        "casanuova-delle-cerbaie-brunello-di-montalcino-2003",
+        "tony-sasa-brunello-di-montalcino-martina-2007",
+        "ramey-cabernet-sauvignon-larkmead-vineyard-2006",
+        "white-cottage-ranch-vineyards-cabernet-sauvignon-howell-moun"
+      ]
+    }
+  ],
+  "redirects": {
+    "ireviewtravel.com": "https://unpaidreviews.com/travel.html",
+    "fivestarcritic.com": "https://unpaidreviews.com/reviews.html"
+  }
+}

@@ -7,6 +7,25 @@
     "contact": "hello@unpaidreviews.com",
     "policies_updated": "2026-11-24"
   },
+  "domains": [
+    {
+      "host": "cellarcommunity.com",
+      "mode": "category",
+      "category": "wine",
+      "name": "Cellar Community",
+      "tagline": "Wine notes nobody paid for."
+    },
+    {
+      "host": "ireviewtravel.com",
+      "mode": "redirect",
+      "target": "/travel.html"
+    },
+    {
+      "host": "fivestarcritic.com",
+      "mode": "redirect",
+      "target": "/reviews.html"
+    }
+  ],
   "categories": [
     {
       "slug": "products",
