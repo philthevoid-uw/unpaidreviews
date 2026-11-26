@@ -17,8 +17,42 @@ async function notFound(env, request, url, prefix) {
   return new Response(page.body, { status: 404, headers: page.headers });
 }
 
+// Headers added to every response on every domain.
+const SECURITY_HEADERS = {
+  "Content-Security-Policy": [
+    "default-src 'self'", "script-src 'self'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", "font-src https://fonts.gstatic.com",
+    "img-src 'self' data:", "connect-src 'self'", "object-src 'none'",
+    "base-uri 'self'", "form-action 'self'", "frame-ancestors 'none'",
+  ].join("; "),
+  "Strict-Transport-Security": "max-age=15552000",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+  "Cross-Origin-Opener-Policy": "same-origin",
+};
+
+// RFC 9116. Renew the Expires date at least once a year.
+const SECURITY_TXT = `Contact: mailto:hello@unpaidreviews.com
+Expires: 2027-11-26T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://unpaidreviews.com/.well-known/security.txt
+`;
+
+function withSecurityHeaders(res) {
+  const out = new Response(res.body, res);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) out.headers.set(k, v);
+  return out;
+}
+
 export default {
   async fetch(request, env) {
+    return withSecurityHeaders(await route(request, env));
+  },
+};
+
+async function route(request, env) {
     const url = new URL(request.url);
     const host = url.hostname.toLowerCase();
     const bare = host.startsWith("www.") ? host.slice(4) : host;
@@ -32,6 +66,9 @@ export default {
       const to = ROUTES.redirects[bare];
       return redirect(to.includes("?") ? to : to + url.search);
     }
+
+    if (url.pathname === "/.well-known/security.txt")
+      return new Response(SECURITY_TXT, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
 
     const file = toFile(url.pathname);
     const site = ROUTES.sites[bare];
@@ -53,5 +90,4 @@ export default {
     target.pathname = prefix + file;
     const res = await env.ASSETS.fetch(new Request(target, request));
     return res.status === 404 ? notFound(env, request, url, prefix) : res;
-  },
-};
+}
