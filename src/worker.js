@@ -1,6 +1,7 @@
 // Routes every domain this site answers on. The table in routes.json is written by
 // build.py from the "domains" list in data/reviews.json. Do not edit routes.json by hand.
 import ROUTES from "./routes.json";
+import { handleApi, isApiPath } from "./api/index.js";
 
 // "/" -> "/index.html", "/about" -> "/about.html", "/css/style.css" stays as is.
 function toFile(path) {
@@ -13,16 +14,18 @@ const redirect = (to) => new Response(null, { status: 301, headers: { Location: 
 async function notFound(env, request, url, prefix) {
   const target = new URL(url);
   target.pathname = prefix + "/404.html";
-  const page = await env.ASSETS.fetch(new Request(target, request));
+  const page = await env.ASSETS.fetch(new Request(target, { method: "GET", headers: request.headers }));
   return new Response(page.body, { status: 404, headers: page.headers });
 }
 
 // Headers added to every response on every domain.
 const SECURITY_HEADERS = {
   "Content-Security-Policy": [
-    "default-src 'self'", "script-src 'self'",
+    "default-src 'self'", "script-src 'self' https://challenges.cloudflare.com",
     "style-src 'self' 'unsafe-inline'", "font-src 'self'",
-    "img-src 'self' data:", "connect-src 'self'", "object-src 'none'",
+    "img-src 'self' data:", "connect-src 'self' https://*.cloudflarestream.com https://upload.videodelivery.net",
+    "frame-src https://challenges.cloudflare.com https://*.cloudflarestream.com",
+    "media-src 'self' https://*.cloudflarestream.com", "object-src 'none'",
     "base-uri 'self'", "form-action 'self'", "frame-ancestors 'none'",
   ].join("; "),
   "Strict-Transport-Security": "max-age=15552000",
@@ -42,7 +45,10 @@ Canonical: https://unpaidreviews.com/.well-known/security.txt
 
 function withSecurityHeaders(res) {
   const out = new Response(res.body, res);
-  for (const [k, v] of Object.entries(SECURITY_HEADERS)) out.headers.set(k, v);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) {
+    if (k === "Content-Security-Policy" && out.headers.has(k)) continue; // stricter per-response policy wins (media, sign-in page)
+    out.headers.set(k, v);
+  }
   return out;
 }
 
@@ -70,6 +76,9 @@ async function route(request, env) {
     if (url.pathname === "/.well-known/security.txt")
       return new Response(SECURITY_TXT, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
 
+    // Accounts, uploads and moderation live on the main domain only
+    if (bare === ROUTES.main && isApiPath(url.pathname)) return handleApi(request, env);
+
     const file = toFile(url.pathname);
     const site = ROUTES.sites[bare];
 
@@ -88,6 +97,6 @@ async function route(request, env) {
     const prefix = site && !shared ? `/_sites/${bare}` : "";
     const target = new URL(url);
     target.pathname = prefix + file;
-    const res = await env.ASSETS.fetch(new Request(target, request));
+    const res = await env.ASSETS.fetch(new Request(target, { method: "GET", headers: request.headers }));
     return res.status === 404 ? notFound(env, request, url, prefix) : res;
 }

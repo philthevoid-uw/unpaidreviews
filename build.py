@@ -443,6 +443,112 @@ def about():
   <p>{e(SITE["name"])} is a community that publishes independent reviews of products, travel, restaurants and wine, written by screened reviewers who are real people and are not employees of, or funded by, what they review. Every review says how the item was obtained. We do not accept payments that would influence a review, we are not paid for affiliate links, and no revenue incentive influences what is reviewed or how it is scored. Any advertising will be clearly visible, and every review must follow the same policy. See <a href="how-we-review.html">how we review</a> and <a href="how-we-make-money.html">how the site is funded</a>.</p>
 </article>"""
 
+
+# ---------- accounts (main site only, never indexed) ----------
+TERMS_CHECKS = [
+    ("malicious", "I will not upload or link to anything malicious: no viruses, malware, scripts, tracking or deceptive files, and nothing designed to harm a person, device or system."),
+    ("responsible", "I am solely responsible for everything I submit or upload, including text, images and video, and for any claim that arises from it."),
+    ("rights", "I warrant that I own, or have every right and permission needed to publish, everything I submit, including permission from anyone identifiable in it, and I grant Unpaid Reviews a worldwide, non-exclusive, royalty-free licence to host, display, edit for formatting and distribute it on this site."),
+]
+def check_html(name, text):
+    return f'<label class="check"><input type="checkbox" name="{name}" required> <span>{e(text)}</span></label>'
+
+def signup_page():
+    checks = "\n".join(check_html(k, t) for k, t in TERMS_CHECKS)
+    return f"""<article class="page narrow">
+  <h1>Become a reviewer: step 1 of 2, create your account</h1>
+  <p>No password. We email you a one-time sign-in link. Step 2 is the reviewer application, where we ask about conflicts of interest.</p>
+  <form id="signup" class="stack" novalidate>
+    <label>Email address <input type="email" name="email" autocomplete="email" required maxlength="254"></label>
+    <label>Public handle <input type="text" name="handle" autocomplete="off" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+"> <small>3 to 24 letters, numbers or underscores. This is the only name shown with your reviews.</small></label>
+    <fieldset><legend>Contributor agreement (<a href="/contributor-terms.html" target="_blank" rel="noopener">read the full terms</a>)</legend>
+    {checks}
+    </fieldset>
+    <div id="turnstile"></div>
+    <button class="btn" type="submit">Email me a sign-in link</button>
+    <p id="msg" role="status"></p>
+  </form>
+  <p>Already have an account? <a href="/signin.html">Sign in</a>.</p>
+</article>
+<script src="/js/account.js"></script>"""
+
+def signin_page():
+    return """<article class="page narrow">
+  <h1>Sign in</h1>
+  <form id="signin" class="stack" novalidate>
+    <label>Email address <input type="email" name="email" autocomplete="email" required maxlength="254"></label>
+    <div id="turnstile"></div>
+    <button class="btn" type="submit">Email me a sign-in link</button>
+    <p id="msg" role="status"></p>
+  </form>
+  <p>New here? <a href="/signup.html">Create an account</a>.</p>
+</article>
+<script src="/js/account.js"></script>"""
+
+def account_page():
+    cats = [("products", "Products"), ("travel", "Travel"), ("restaurants", "Restaurants"), ("wine", "Wine"), ("other", "Other")]
+    catbox = "".join(f'<label class="check"><input type="checkbox" name="cat" value="{v}"> {l}</label>' for v, l in cats)
+    att = [("truthful", "Everything in this application is true and complete."),
+           ("own_experience", "I will review only things I have personally bought, visited or used at my own expense."),
+           ("no_ai", "I will not use AI to write my reviews or to invent experiences."),
+           ("no_payment", "I will not accept payment, free products, free stays, discounts or other benefits from anyone I review."),
+           ("disclose_changes", "I will tell Unpaid Reviews promptly if my circumstances or conflicts of interest change."),
+           ("removal", "I understand reviews and my access can be removed if I break these rules.")]
+    attbox = "\n".join(check_html(k, t) for k, t in att)
+    qs = [("works_in_category", "Do you work for, or own part of, any business in the categories you chose? Write \"None\" if not."),
+          ("paid_for_reviews", "Have you been paid, or given free items or stays, for reviews in the last five years? Write \"None\" if not."),
+          ("affiliate_programs", "Do you earn affiliate commissions or run a review or content site? Write \"None\" if not."),
+          ("other_relationships", "Any other relationship with a business, brand or person you may review? Write \"None\" if not.")]
+    qbox = "".join(f'<label>{e(q)} <textarea name="{k}" rows="2" maxlength="600" required></textarea></label>' for k, q in qs)
+    return f"""<article class="page narrow">
+  <h1>Your account</h1>
+  <p id="who" role="status">Loading…</p>
+  <section id="apply" hidden>
+    <h2>Step 2 of 2: reviewer application</h2>
+    <form id="appform" class="stack" novalidate>
+      <label>Country you live in <input type="text" name="country" required maxlength="80"></label>
+      <fieldset><legend>What will you review?</legend>{catbox}</fieldset>
+      <label>Writing sample: a review of something you recently bought, visited or used (300 characters minimum) <textarea name="sample" rows="8" maxlength="2000" required></textarea></label>
+      <label>Links to other reviews you have written (optional) <textarea name="links" rows="2" maxlength="1000"></textarea></label>
+      <h3>Conflicts of interest</h3>
+      {qbox}
+      <fieldset><legend>Reviewer standards</legend>{attbox}</fieldset>
+      <button class="btn" type="submit">Submit application</button>
+      <p id="msg" role="status"></p>
+    </form>
+  </section>
+  <section id="pending" hidden><h2>Application received</h2><p>A person reads every application. We will email you when it has been decided. Identity verification comes next for approved applicants.</p></section>
+  <section id="declined" hidden><h2>Application not accepted</h2><p>Thank you for applying. We are not able to offer a reviewer place at this time.</p></section>
+  <section id="uploads" hidden>
+    <h2>Upload photos and video</h2>
+    <p>JPEG, PNG or WebP images up to 10 MB, and video up to 3 minutes. Everything is checked, and a person approves your first upload. Nothing appears on the site until it is approved. Do not upload anything you do not have the rights to, or anything malicious, unlawful or inappropriate.</p>
+    <p><input type="file" id="imgfile" accept="image/jpeg,image/png,image/webp"> <button class="btn" id="imgbtn" type="button">Upload image</button></p>
+    <p><input type="file" id="vidfile" accept="video/mp4,video/quicktime,video/webm"> <button class="btn" id="vidbtn" type="button">Upload video</button></p>
+    <p id="upmsg" role="status"></p>
+    <h3>Your uploads</h3>
+    <ul id="uplist"></ul>
+  </section>
+  <section id="admin" hidden>
+    <h2>Moderation queue</h2>
+    <div id="queue"></div>
+  </section>
+  <p><button class="btn ghost" id="logout" type="button" hidden>Sign out</button></p>
+</article>
+<script src="/js/account.js"></script>"""
+
+def contributor_terms():
+    items = "".join(f"<li>{e(t)}</li>" for _, t in TERMS_CHECKS)
+    return f"""<article class="page">
+  <h1>Contributor agreement</h1>
+  <p><i>Draft for legal review. Version contributor-2026-11-v1.</i></p>
+  <p>By creating an account you agree to the following, and you repeat that agreement every time you submit content:</p>
+  <ol>{items}</ol>
+  <h2>What happens to uploads</h2>
+  <p>Uploads are held privately until a person approves them. We re-encode images, which removes hidden metadata such as location, and we may refuse, edit for formatting, or remove any content at any time, including on a rights or safety complaint. Report a problem at {e(SITE["contact"])}.</p>
+  <h2>Accounts</h2>
+  <p>We may suspend an account that breaks these terms or the reviewer standards. You can ask us to delete your account at any time.</p>
+</article>"""
+
 def not_found():
     return """<article class="page"><h1>Page not found</h1><p>That page does not exist. Try the <a href="index.html">home page</a> or <a href="reviews.html">all reviews</a>.</p></article>"""
 
@@ -504,6 +610,9 @@ def build_main():
     write("suggest.html", page("suggest.html", f'Suggest a review | {NAME}', "Tell us what to review next.", suggest()))
     write("whats-next.html", page("whats-next.html", f'Our reviewers: the plan | {NAME}', "How reviewers are screened and the principles for our review community.", whats_next()))
     write("about.html", page("about.html", f'About | {NAME}', "About this site.", about()))
+    for fn, ttl, body in (("signup.html", "Create your account", signup_page()), ("signin.html", "Sign in", signin_page()),
+                          ("account.html", "Your account", account_page()), ("contributor-terms.html", "Contributor agreement", contributor_terms())):
+        write(fn, page(fn, f"{ttl} | {NAME}", ttl, body, noindex=True))
     write("404.html", page("404.html", f'Not found | {NAME}', "Page not found.", not_found(), noindex=True))
     kept = [r for r in ALL_REVIEWS if host_of(r) == MAIN]
     for r in kept:
