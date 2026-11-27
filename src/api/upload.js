@@ -3,7 +3,7 @@
 import { json, fail, newId, now, sameOrigin, readJson, logEvent, ipHash, limited, DAY, HttpError } from "./util.js";
 
 const MAX_IMAGE = 10 * 1024 * 1024;       // bytes
-const MAX_VIDEO_SECONDS = 180;
+const MAX_VIDEO_SECONDS = 20;
 const IMAGES_PER_DAY = 20, VIDEOS_PER_DAY = 3, PENDING_CAP = 40;
 
 // Identify by magic bytes, never by the filename or the declared Content-Type.
@@ -114,7 +114,7 @@ export async function videoComplete(request, env, user) {
   if (v.duration > MAX_VIDEO_SECONDS) {
     await env.DB.prepare("UPDATE uploads SET status='rejected', note='too long', decided_at=? WHERE id=?").bind(now(), up.id).run();
     await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.STREAM_ACCOUNT_ID}/stream/${up.stream_uid}`, { method: "DELETE", headers: { Authorization: `Bearer ${env.STREAM_TOKEN}` } });
-    return fail(413, "Videos can be up to 3 minutes.");
+    return fail(413, "Videos can be up to 20 seconds.");
   }
   const status = initialStatus(user);
   await env.DB.prepare("UPDATE uploads SET status=?, duration=?, bytes=?, published_by=?, decided_at=? WHERE id=?")

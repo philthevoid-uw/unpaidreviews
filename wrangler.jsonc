@@ -12,5 +12,34 @@
     "run_worker_first": true
   },
   "workers_dev": false,
-  "preview_urls": false
+  "preview_urls": false,
+
+  // ---- D1 database ----
+  // database_id is filled in after creating the D1 database in the dashboard.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "unpaidreviews", "database_id": "1d7b82ab-1492-4ae9-9474-6211d04f5e1b" }
+  ],
+
+  // ---- R2 object storage (images) ----
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "unpaidreviews-media" }
+  ],
+
+  // ---- Cloudflare Images (re-encode uploads to WebP) ----
+  "images": { "binding": "IMAGES" },
+
+  // ---- Email (send magic-link emails) ----
+  // Requires Workers Paid plan for arbitrary-recipient emails.
+  // Until Workers Paid is active, the worker falls back to RESEND_API_KEY or DEV_MODE logging.
+  "send_email": { "binding": "EMAIL" }
+
+  // ---- Secrets and vars (set via `wrangler secret put` or the dashboard, NOT in this file) ----
+  // TURNSTILE_SECRET        – Turnstile widget secret key
+  // TURNSTILE_SITE_KEY      – Turnstile widget site key (can be a var instead of secret)
+  // HASH_PEPPER             – random string for salting IP hashes
+  // ADMIN_EMAILS            – comma-separated admin email addresses
+  // STREAM_ACCOUNT_ID       – Cloudflare account ID (for Stream API calls)
+  // STREAM_TOKEN            – Stream API token with direct-upload permission
+  // RESEND_API_KEY           – (optional) Resend.com API key as email fallback
+  // DEV_MODE                – set to "1" only for local testing
 }

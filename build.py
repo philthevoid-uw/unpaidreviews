@@ -521,7 +521,7 @@ def account_page():
   <section id="declined" hidden><h2>Application not accepted</h2><p>Thank you for applying. We are not able to offer a reviewer place at this time.</p></section>
   <section id="uploads" hidden>
     <h2>Upload photos and video</h2>
-    <p>JPEG, PNG or WebP images up to 10 MB, and video up to 3 minutes. Everything is checked, and a person approves your first upload. Nothing appears on the site until it is approved. Do not upload anything you do not have the rights to, or anything malicious, unlawful or inappropriate.</p>
+    <p>JPEG, PNG or WebP images up to 10 MB, and video up to 20 seconds. Everything is checked, and a person approves your first upload. Nothing appears on the site until it is approved. Do not upload anything you do not have the rights to, or anything malicious, unlawful or inappropriate.</p>
     <p><input type="file" id="imgfile" accept="image/jpeg,image/png,image/webp"> <button class="btn" id="imgbtn" type="button">Upload image</button></p>
     <p><input type="file" id="vidfile" accept="video/mp4,video/quicktime,video/webm"> <button class="btn" id="vidbtn" type="button">Upload video</button></p>
     <p id="upmsg" role="status"></p>
